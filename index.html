@@ -169,8 +169,8 @@ table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
   </div>
   <div class="route">
     <div class="legs"><div class="leg"><i></i></div><div class="leg"><i></i></div><div class="leg"><i></i></div><div class="leg"><i></i></div></div>
-    <div class="names"><span>Köln</span><span>Basel</span><span>Gotthard</span><span>Wallis</span></div>
-    <div class="pct" id="pct">Grenze: 0 Prozent passiert</div>
+    <div class="names"><span>Anmeldung</span><span>Quiz 1</span><span>Gotthard</span><span>Quiz 2</span></div>
+    <div class="pct" id="pct">Zollabfertigung: 0 Prozent</div>
   </div>
 </header>
 
@@ -181,10 +181,11 @@ table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
   <p><b>Sind Sie bereit für den Zollprozess?</b></p>
   <p>Das kann einige Minuten in Anspruch nehmen. Am besten nehmen Sie sich Zeit. Falls es gerade nicht passt, nehmen Sie sich einen Kaffee und kommen Sie später noch einmal.</p>
   <table class="meta">
-    <tr><td>Absenderin</td><td>Caro, Köln (Deutschland)</td></tr>
+    <tr><td>Aufgegeben</td><td>Von Caro in Köln (Deutschland)</td></tr>
     <tr><td>Empfänger</td><td>Tobi, Wallis (Schweiz)</td></tr>
     <tr><td>Inhalt</td><td>2 Rezepte, kulinarische Güter</td></tr>
     <tr><td>Warenwert</td><td>unbezahlbar</td></tr>
+    <tr><td>Status</td><td>Am Zollamt Wallis festgehalten</td></tr>
     <tr><td>Sendungsnummer</td><td id="sendnr">CH-WS-0711</td></tr>
   </table>
   <button class="btn" id="startBtn">Start</button>
@@ -270,7 +271,7 @@ table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
 </section>
 
 <section id="s-wait">
-  <h1>Zollstelle Köln: Ihre Wartenummer</h1>
+  <h1>Ihre Wartenummer</h1>
   <div class="ticket">
     <div class="stub"><span>Schalter</span><span>3</span></div>
     <div class="body">
@@ -288,7 +289,7 @@ table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
 </section>
 
 <section id="s-pers">
-  <h1>Zollstelle Köln, Schalter 3</h1>
+  <h1>Zollamt Wallis, Schalter 3</h1>
   <p class="muted">Angaben zur Person und zum Zweck der Einfuhr.</p>
   <div class="field"><label class="t">Name des Empfängers</label><input type="text" value="Tobi" disabled></div>
   <div class="field"><label class="t" for="job">Beruf</label>
@@ -304,21 +305,21 @@ table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
 
 <section id="s-q1">
   <h1>Zollquiz 1 von 2</h1>
-  <p class="muted">Grenzübergang Basel. Position 1: Südtiroler Käsespätzle. Warenursprung: Südtirol, Italien.</p>
+  <p class="muted">Zollamt Wallis. Position 1: Südtiroler Käsespätzle. Warenursprung: Südtirol, Italien.</p>
   <div id="quiz1"></div>
 </section>
 
 <section id="s-stau">
-  <h1>Stau vor dem Gotthard</h1>
+  <h1>Rekonstruktion: Gotthard-Stau</h1>
   <div class="stats"><span>Stau: <b id="km">17,0</b> km</span><span>Ihr Puls: <b id="bpm">72</b> bpm</span></div>
   <div class="road" id="road"></div>
-  <div class="fb" id="staufb"><svg class="mini" viewBox="22 14 76 96"><use href="#face"/></svg><div><b>Zöllner Imboden, per Funk aus dem Stau</b><span id="stautxt">Die Kolonne steht. Es ist 14:32 Uhr und es sieht nicht gut aus.</span></div></div>
+  <div class="fb" id="staufb"><svg class="mini" viewBox="22 14 76 96"><use href="#face"/></svg><div><b>Zöllner Imboden, Protokoll</b><span id="stautxt">Die Kolonne steht. Laut Sendungsverfolgung war es 14:32 Uhr, und es sah nicht gut aus.</span></div></div>
   <button class="btn" id="honk">Hupen (noch 20x)</button>
 </section>
 
 <section id="s-cap">
   <h1>Zollamt Wallis</h1>
-  <p class="muted">Röntgenkontrolle des Handgepäcks.</p>
+  <p class="muted">Röntgenkontrolle des Pakets.</p>
   <h2 id="capq">Wählen Sie alle Bilder mit Bagel aus.</h2>
   <div class="grid" id="capgrid"></div>
   <div class="fb" id="capfb" hidden></div>
@@ -376,37 +377,37 @@ const HONKS = 20;
 
 /* ---- Szenen mit großem Zöllner ---- */
 const SC = {
- start:{p:3,leg:0,prop:'',sign:'ZOLLSTELLE KÖLN',who:'Zöllner Imboden, per Video',btn:'Wartenummer ziehen',pages:[
-  {t:'Grüezi, Tobi. Ich bin Zöllner Imboden vom Zollamt Wallis. Ihre Sendung steht aber noch in Köln, bei Caro. Weil die Kölner Kollegen gerade Kaffeepause haben, vertrete ich sie per Videoschalte. Das ist völlig normal, Schweizer Effizienz.'},
-  {t:'Auf meinem Tisch, also auf Ihrem Bildschirm, liegt eine Sendung: zwei Rezepte, keine Anmeldung, kein Kaffee. Sehr verdächtig.'},
-  {t:'Ich begleite die Sendung auf der ganzen Reise: Köln, Basel, Gotthard, Wallis. An jeder Station erkläre ich Ihnen, was passiert, damit Sie nicht denken, das ist alles nur ein Scherz. Es ist ein amtlicher Scherz.'},
+ start:{p:3,leg:0,prop:'',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Wartenummer ziehen',pages:[
+  {t:'Grüezi, Tobi. Ich bin Zöllner Imboden vom Zollamt Wallis. Caro hat in Köln ein Paket für Sie aufgegeben: zwei Rezepte. Es ist durch Deutschland und über Basel gekommen, und jetzt hängt es hier bei mir am Zoll fest.'},
+  {t:'Warum? Rezepte sind in der Schweiz zollpflichtig, und diese hier sind verdächtig: keine Anmeldung, kein Kaffee. Ich gebe sie erst frei, wenn Sie den Zollprozess durchlaufen haben.'},
+  {t:'Ich erkläre Ihnen jeden Schritt, damit Sie nicht denken, das ist alles nur ein Scherz. Es ist ein amtlicher Scherz.'},
   {t:'Schritt eins: Sie ziehen eine Wartenummer. Danach warten Sie eine Minute. Das ist Absicht und gehört zur Schweiz.'}]},
- called:{p:10,leg:0,prop:'coffee',sign:'ZOLLSTELLE KÖLN',who:'Zöllner Imboden, per Video',btn:'Zum Formular',pages:[
-  {t:'Nummer 4711, bitte an Schalter 3 der Zollstelle Köln. Das sind Sie. Setzen Sie sich, ich trinke nur noch kurz meinen Kaffee. Ich habe ihn aus dem Wallis mitgebracht.',mood:'ok'},
+ called:{p:10,leg:0,prop:'coffee',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Zum Formular',pages:[
+  {t:'Nummer 4711, bitte an Schalter 3. Das sind Sie. Setzen Sie sich, ich trinke nur noch kurz meinen Kaffee.',mood:'ok'},
   {t:'Schritt zwei: Ihre Personalien. Beruf und Zweck der Einfuhr. Reine Formsache, aber ohne Formular kein Rezept. Das ist das Gesetz, und ich habe es gerade erfunden.'}]},
- quiz1:{p:13,leg:1,prop:'plate',sign:'GRENZE BASEL',who:'Zöllner Imboden, Video Basel',btn:'Zu den Fragen',pages:[
-  {t:'Ihre Angaben sind in Ordnung. Die Sendung verlässt Köln und fährt über die A5 nach Basel. Ich bin schon da, ich habe die schnellere Verbindung. Willkommen am Grenzübergang Basel.',mood:'ok'},
-  {t:'Schritt drei: das Zollquiz. Jedes Rezept bekommt sein eigenes. Pro Rezept gibt es sieben Fragen, jeweils mit genau einer richtigen Antwort.'},
+ quiz1:{p:13,leg:1,prop:'plate',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Zu den Fragen',pages:[
+  {t:'Ihre Angaben sind in Ordnung. Dann zum Kern der Sache.',mood:'ok'},
+  {t:'Schritt drei: das Zollquiz. Jedes Rezept in Ihrem Paket bekommt sein eigenes. Pro Rezept gibt es sieben Fragen, jeweils mit genau einer richtigen Antwort.'},
   {t:'Warum? Südtiroler Käsespätzle kommen aus Italien und enthalten Bergkäse, Eier, Muskat, Zwiebeln und Speck. Das gilt bei uns als sensibles Gut. Wer es einführt, muss die Zutaten verstehen. Das prüfe ich jetzt.'},
   {t:'Die Fragen kommen aus Küche und Medizin. Sie sind Arzt, Sie schaffen das. Ich glaube es zumindest. Rechtlich bin ich nicht verpflichtet, es zu glauben.'}]},
- mid1:{p:34,leg:1,prop:'plate',sign:'GRENZE BASEL',who:'Zöllner Imboden, Video Basel',btn:'Weiter mit Frage 5',pages:[
+ mid1:{p:34,leg:1,prop:'plate',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Weiter mit Frage 5',pages:[
   {t:'Halbzeit, Tobi. Ich muss kurz pausieren. Laut Zollreglement Artikel 7 darf ein Beamter bei Käsespätzle nicht arbeiten, nur essen. Ich beschlagnahme eine Gabel zu Prüfzwecken.',mood:'ok'}]},
- stau:{p:54,leg:2,prop:'navi',sign:'FUNK GOTTHARD',who:'Zöllner Imboden, per Funk',btn:'Zum Stau',pages:[
+ stau:{p:54,leg:2,prop:'navi',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Stau rekonstruieren',pages:[
   {t:'Quiz 1 bestanden. Käsespätzle: vorläufig in Ordnung. Ich notiere das mit Bleistift, falls Sie es sich anders überlegen.',mood:'ok'},
-  {t:'Aber jetzt zum Transport. Das Navi von Caros Paketdienst hat die Sendung ab Basel über den Gotthard geleitet. Von Basel ins Wallis über den Gotthard, das ist ungefähr so, als würde man von Köln nach Düsseldorf über Rom fahren.'},
-  {t:'Es gibt 17 Kilometer Stau. Ich melde mich per Funk, ich sitze selbst im Stau. Ihre Aufgabe: hupen. 20 Mal. Das wirkt nicht, aber es hilft der Seele.'}]},
- wallis:{p:66,leg:3,prop:'',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden, endlich zu Hause',btn:'Zum Scanner',pages:[
-  {t:'Sie haben den Stau überlebt. Puls 142, ich mache mir Sorgen. Sie sind Arzt, bitte nehmen Sie sich kurz selbst den Puls.',mood:'ok'},
-  {t:'Willkommen im Wallis. Hier sitze ich wirklich, und die Sendung ist endlich bei mir angekommen. Jetzt die Röntgenkontrolle des Handgepäcks. Mein Scanner kann leider nicht unterscheiden, ob etwas ein Bagel oder ein Hund ist. Ein Kollege hat deshalb einmal einen Mops verzollt.'},
+  {t:'Jetzt ein Fall fürs Protokoll. Laut Sendungsverfolgung stand Ihr Paket auf dem Weg von Köln ins Wallis 17 Kilometer im Gotthard-Stau. Das Navi des Paketdienstes hat es über den Gotthard geschickt. Von Köln ins Wallis über den Gotthard, das ist ungefähr so, als würde man von Köln nach Düsseldorf über Rom fahren.'},
+  {t:'Verspätung ist zollrelevant. Damit das Protokoll stimmt, müssen wir den Stau rekonstruieren. Ihre Aufgabe: hupen. 20 Mal. Das wirkt nicht, aber es hilft der Seele.'}]},
+ wallis:{p:66,leg:3,prop:'',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Zum Scanner',pages:[
+  {t:'Rekonstruktion abgeschlossen. Puls 142, ich mache mir Sorgen. Sie sind Arzt, bitte nehmen Sie sich kurz selbst den Puls.',mood:'ok'},
+  {t:'Jetzt die Röntgenkontrolle. Ihr Paket geht durch den Scanner, und der kann leider nicht unterscheiden, ob etwas ein Bagel oder ein Hund ist. Ein Kollege hat deshalb einmal einen Mops verzollt.'},
   {t:'Zeigen Sie mir bitte alle Bilder mit Bagel. Tippen Sie sie an und drücken Sie auf Bestätigen. Zwei Runden, sicher ist sicher.'}]},
  quiz2:{p:70,leg:3,prop:'coffee',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Zu den Fragen',pages:[
-  {t:'Kontrolle bestanden, kein Hund im Gepäck. Der Mops bleibt draußen.',mood:'ok'},
+  {t:'Kontrolle bestanden, kein Hund im Paket. Der Mops bleibt draußen.',mood:'ok'},
   {t:'Schritt fünf: das zweite Zollquiz, die Montreal Bagels. Aus Kanada, also Übersee, und mit Honig im Kochwasser. Honig im Kochwasser ist bei uns ein meldepflichtiges Backgeheimnis. Deshalb braucht es ein Quiz.'},
   {t:'Außerdem hat Montreal erstaunlich viele medizinische Meilensteine. Wer die Bagels einführt, soll wissen, woher sie kommen. Wieder sieben Fragen.'}]},
  mid2:{p:84,leg:3,prop:'coffee',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Weiter mit Frage 5',pages:[
   {t:'Halbzeit. Ich muss etwas gestehen: Ich habe heute früh einen Bagel mit Frischkäse gegessen, ohne ihn anzumelden. Ich verzolle mich selbst. Das macht zwei Franken, zahlbar in Frischkäse.',mood:'ok'}]},
  final:{p:98,leg:3,prop:'stamp',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Stempel drauf',slam:true,pages:[
-  {t:'Alles geprüft: zwei Quizze bestanden, keine Hunde, Puls im Rahmen. Ich erteile hiermit die Zollfreigabe.',mood:'ok'},
+  {t:'Alles geprüft: zwei Quizze bestanden, keine Hunde, Puls im Rahmen. Ich erteile hiermit die Zollfreigabe für Ihr Paket.',mood:'ok'},
   {t:'Und jetzt der wichtigste Teil meiner Arbeit: der Stempel. Dafür habe ich drei Jahre Ausbildung gemacht.'}]}
 };
 
@@ -524,7 +525,7 @@ const CAP_ROUNDS = [
  [['dog0',0],['bagel6',1],['dog21',0],['bagel1',1],['dog31',0],['bagel3',1],['dog16',0],['bagel21',1],['dog4',0]],
  [['bagel20',1],['dog26',0],['bagel2',1],['dog24',0],['bagel0',1],['dog18',0],['bagel4',1],['dog1',0],['bagel5',1]]
 ];
-const CAP_BAD_DOG = ['Stopp. In Ihrem Handgepäck ist ein Hund. Der ist nicht deklariert. Bitte nochmals prüfen.','Das war ein Hund. Der Bagel hat sich beschwert.','Hund erkannt. Er schaut mich an. Das ist unangenehm.'];
+const CAP_BAD_DOG = ['Stopp. In Ihrem Paket ist ein Hund. Der ist nicht deklariert. Bitte nochmals prüfen.','Das war ein Hund. Der Bagel hat sich beschwert.','Hund erkannt. Er schaut mich an. Das ist unangenehm.'];
 const CAP_BAD_MISS = ['Es wurden unverzollte Bagels übersehen. Bitte genauer hinsehen.','Da liegt noch ein Bagel. Er winkt Ihnen zu.','Da fehlt noch einer. Er schmollt schon.'];
 
 const STAU_MSG = [
@@ -555,7 +556,7 @@ function setProg(p, leg){
   const per = 25;
   legs.forEach((el,i)=>{ const v = Math.max(0, Math.min(per, p - i*per)); el.style.width = (v/per*100)+'%'; });
   names.forEach((el,i)=>el.classList.toggle('on', i===leg));
-  pct.textContent = 'Grenze: ' + Math.round(p) + ' Prozent passiert';
+  pct.textContent = 'Zollabfertigung: ' + Math.round(p) + ' Prozent';
 }
 function go(id, p, leg){
   $$('section').forEach(s=>s.classList.toggle('on', s.id===id));
@@ -722,8 +723,8 @@ function startStau(){
       honk.textContent = `Hupen (noch ${left}x)`;
       $('#stautxt').textContent = STAU_MSG[(clicks-1) % STAU_MSG.length];
     } else {
-      honk.disabled = true; honk.textContent = 'Weiterfahren';
-      $('#stautxt').textContent = 'Der Stau hat sich aufgelöst. Ihr Puls liegt bei 142. Weiterfahren, bevor es wieder losgeht.';
+      honk.disabled = true; honk.textContent = 'Protokoll abgeschlossen';
+      $('#stautxt').textContent = 'Der Stau ist rekonstruiert und aufgelöst. Ihr Puls liegt bei 142. Das Protokoll ist vollständig.';
       setTimeout(()=>scene(SC.wallis, ()=>{ go('s-cap', 66, 3); startCaptcha(); }), FAST?600:2400);
     }
   };
