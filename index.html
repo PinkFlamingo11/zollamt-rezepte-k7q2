@@ -89,6 +89,16 @@ table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
 .card .in b{display:block;margin-bottom:2px}
 .card .btn{margin:0;border-top:1px solid var(--ink)}
 .small{font-size:13px;color:var(--mute)}
+.sheepbox{border:1px solid var(--ink);margin:0 0 12px;background:#fff;overflow:hidden}
+.sheepbox svg{display:block;width:100%;height:auto}
+#sheep .sbody{transform-box:fill-box;transform-origin:50% 100%;transition:transform .08s}
+#sheep.press .sbody{transform:scaleY(.92)}
+#sheep .hands{transition:transform .08s}
+#sheep.press .hands{transform:translateY(16px)}
+#sheep .eyes-open,#sheep .maeh{display:none}
+#sheep.awake .xeyes{display:none}
+#sheep.awake .eyes-open,#sheep.awake .maeh{display:block}
+#sheep.awake .hands{display:none}
 .ticker.swap{animation:pop .3s}
 .ticker{min-height:46px;font-size:15px;color:var(--mute);margin:8px 0}
 
@@ -170,7 +180,7 @@ table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
   </div>
   <div class="route">
     <div class="legs"><div class="leg"><i></i></div><div class="leg"><i></i></div><div class="leg"><i></i></div><div class="leg"><i></i></div></div>
-    <div class="names"><span>Anmeldung</span><span>Quiz 1</span><span>Gotthard</span><span>Quiz 2</span></div>
+    <div class="names"><span>Anmeldung</span><span>Quiz 1</span><span>Notfall</span><span>Quiz 2</span></div>
     <div class="pct" id="pct">Zollabfertigung: 0 Prozent</div>
   </div>
 </header>
@@ -311,11 +321,48 @@ table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
 </section>
 
 <section id="s-stau">
-  <h1>Rekonstruktion: Gotthard-Stau</h1>
-  <div class="stats"><span>Stau: <b id="km">17,0</b> km</span><span>Ihr Puls: <b id="bpm">72</b> bpm</span></div>
-  <div class="road" id="road"></div>
-  <div class="fb" id="staufb"><svg class="mini" viewBox="22 14 76 96"><use href="#face"/></svg><div><b>Zöllner Imboden, Protokoll</b><span id="stautxt">Die Kolonne steht. Laut Sendungsverfolgung war es 14:32 Uhr, und es sah nicht gut aus.</span></div></div>
-  <button class="btn" id="honk">Hupen (noch 20x)</button>
+  <h1>Notfall: Schaf reanimieren</h1>
+  <div class="stats"><span>Kompressionen: <b id="cnt">0</b> von 30</span><span>Puls: <b id="pulse">kein Puls</b></span></div>
+  <div class="sheepbox">
+    <svg id="sheep" viewBox="0 0 240 150" aria-hidden="true">
+      <rect x="0" y="126" width="240" height="24" fill="#B9CF98"/>
+      <rect x="0" y="126" width="240" height="2" fill="#8EAA68"/>
+      <!-- leerer Teller mit Gabel -->
+      <ellipse cx="206" cy="132" rx="26" ry="6" fill="#fff" stroke="#141414" stroke-width="1.5"/>
+      <ellipse cx="200" cy="129" rx="5" ry="2.6" fill="#E8C35A"/><ellipse cx="212" cy="130" rx="4" ry="2.4" fill="#E8C35A"/>
+      <g class="sbody">
+        <!-- Beine in die Luft -->
+        <g class="legs" fill="#3B3B3B">
+          <rect x="84" y="46" width="7" height="42"/><rect x="82" y="42" width="11" height="6"/>
+          <rect x="102" y="40" width="7" height="46"/><rect x="100" y="36" width="11" height="6"/>
+          <rect x="140" y="40" width="7" height="46"/><rect x="138" y="36" width="11" height="6"/>
+          <rect x="158" y="46" width="7" height="42"/><rect x="156" y="42" width="11" height="6"/>
+        </g>
+        <!-- Wolle -->
+        <g fill="#fff" stroke="#141414" stroke-width="1.6">
+          <circle cx="92" cy="100" r="24"/><circle cx="120" cy="92" r="28"/><circle cx="152" cy="100" r="24"/>
+          <circle cx="106" cy="112" r="20"/><circle cx="138" cy="112" r="20"/>
+        </g>
+        <!-- Kopf links -->
+        <polygon points="26,92 58,84 70,104 62,124 34,124 22,110" fill="#3B3B3B"/>
+        <polygon points="40,84 34,70 52,80" fill="#3B3B3B"/>
+        <g class="xeyes" stroke="#fff" stroke-width="2.4"><line x1="37" y1="96" x2="45" y2="104"/><line x1="45" y1="96" x2="37" y2="104"/></g>
+        <g class="eyes-open"><rect x="36" y="95" width="9" height="9" fill="#fff"/><rect x="39" y="97" width="4" height="6" fill="#141414"/></g>
+        <path d="M30 116 q6 5 14 0" stroke="#fff" stroke-width="2" fill="none"/>
+        <path d="M24 118 q3 10 8 6 q4 -4 1 -8" stroke="#E8C35A" stroke-width="3" fill="none"/>
+      </g>
+      <!-- Hände -->
+      <g class="hands">
+        <rect x="108" y="-4" width="22" height="30" fill="#2F3E4E"/>
+        <rect x="110" y="26" width="18" height="14" fill="#EFC49F"/>
+        <rect x="108" y="38" width="22" height="6" fill="#EFC49F"/>
+      </g>
+      <g class="maeh"><rect x="60" y="22" width="70" height="26" fill="#fff" stroke="#141414" stroke-width="1.4"/><text x="95" y="40" font-size="14" font-weight="700" text-anchor="middle" fill="#141414" font-family="Helvetica,Arial,sans-serif">Määäh!</text></g>
+    </svg>
+  </div>
+  <div class="bar"><i id="cprbar"></i></div>
+  <div class="fb" id="staufb"><svg class="mini" viewBox="22 14 76 96"><use href="#face"/></svg><div><b>Zöllner Imboden, Anleitung</b><span id="stautxt">Das Schaf liegt auf dem Rücken, alle Viere von sich gestreckt.</span></div></div>
+  <button class="btn keep" id="honk">Herzdruckmassage (noch 30x)</button>
 </section>
 
 <section id="s-cap">
@@ -343,6 +390,7 @@ table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
       <tr><td>Empfänger</td><td>Tobi, Wallis (CH)</td></tr>
       <tr><td>Position 1</td><td>Südtiroler Käsespätzle<br><span class="muted">Zollquiz bestanden</span></td></tr>
       <tr><td>Position 2</td><td>Montreal Bagels<br><span class="muted">Zollquiz bestanden, Hunde nicht eingeführt</span></td></tr>
+      <tr><td>Besonderes</td><td>1 Schaf erfolgreich reanimiert</td></tr>
       <tr><td>Zollgebühr</td><td>Eine Postkarte aus der schönen Schweiz an Caro</td></tr>
       <tr><td>Datum</td><td id="belegdate"></td></tr>
       <tr><td>Zollbeamter</td><td>Imboden, Zollamt Wallis</td></tr>
@@ -393,14 +441,14 @@ const SC = {
   {t:"Die Fragen kommen aus Küche und Medizin. Sie sind Arzt, Sie schaffen das. Ich glaube es zumindest. Rechtlich bin ich nicht verpflichtet, es zu glauben. Und wenn Sie falsch liegen, kommentiere ich das. Mit Genuss."}]},
  mid1:{p:34,leg:1,prop:'plate',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Weiter mit Frage 5',pages:[
   {t:'Halbzeit, Tobi. Ich muss kurz pausieren. Laut Zollreglement Artikel 7 darf ein Beamter bei Käsespätzle nicht arbeiten, nur essen. Ich beschlagnahme eine Gabel zu Prüfzwecken.',mood:'ok'}]},
- stau:{p:54,leg:2,prop:'navi',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Stau rekonstruieren',pages:[
-  {t:'Quiz 1 bestanden. Käsespätzle: vorläufig in Ordnung. Ich notiere das mit Bleistift, falls Sie es sich anders überlegen.',mood:'ok'},
-  {t:'Jetzt ein Fall fürs Protokoll. Laut Sendungsverfolgung stand Ihr Paket auf dem Weg von Köln ins Wallis 17 Kilometer im Gotthard-Stau. Das Navi des Paketdienstes hat es über den Gotthard geschickt. Von Köln ins Wallis über den Gotthard, das ist ungefähr so, als würde man von Köln nach Düsseldorf über Rom fahren.'},
-  {t:'Verspätung ist zollrelevant. Damit das Protokoll stimmt, müssen wir den Stau rekonstruieren. Ihre Aufgabe: hupen. 20 Mal. Das wirkt nicht, aber es hilft der Seele.'}]},
+ stau:{p:54,leg:2,prop:'navi',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Schaf reanimieren',pages:[
+  {t:"Quiz 1 bestanden. Käsespätzle: vorläufig in Ordnung. Ich notiere das mit Bleistift, falls Sie es sich anders überlegen.",mood:'ok'},
+  {t:"Und nun ein Notfall, Herr Doktor. Ein Schaf hat sich an den Käsespätzle in Ihrem Paket bedient, und zwar an allen. Jetzt liegt es vor meinem Zollamt und rührt sich nicht mehr."},
+  {t:"Sie sind der einzige Arzt weit und breit. Bitte reanimieren Sie das Schaf. Das Protokoll sieht 30 Herzdruckmassagen und 2 Beatmungen vor, auch für Schafe. Jeder Klick ist ein Stoß."}]},
  wallis:{p:66,leg:3,prop:'',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Zum Scanner',pages:[
-  {t:'Rekonstruktion abgeschlossen. Puls 142, ich mache mir Sorgen. Sie sind Arzt, bitte nehmen Sie sich kurz selbst den Puls.',mood:'ok'},
-  {t:'Jetzt die Röntgenkontrolle. Ihr Paket geht durch den Scanner, und der kann leider nicht unterscheiden, ob etwas ein Bagel oder ein Hund ist. Ein Kollege hat deshalb einmal einen Mops verzollt.'},
-  {t:'Zeigen Sie mir bitte alle Bilder mit Bagel. Tippen Sie sie an und drücken Sie auf Bestätigen. Zwei Runden, sicher ist sicher.'}]},
+  {t:"Das Schaf lebt und sucht schon das nächste Paket. Hervorragende Arbeit, Herr Doktor. Ihr eigener Puls liegt bei 142, bitte setzen Sie sich kurz hin.",mood:'ok'},
+  {t:"Jetzt die Röntgenkontrolle. Ihr Paket geht durch den Scanner, und der kann leider nicht unterscheiden, ob etwas ein Bagel oder ein Hund ist. Ein Kollege hat deshalb einmal einen Mops verzollt."},
+  {t:"Zeigen Sie mir bitte alle Bilder mit Bagel. Tippen Sie sie an und drücken Sie auf Bestätigen. Zwei Runden, sicher ist sicher."}]},
  quiz2:{p:70,leg:3,prop:'coffee',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Zu den Fragen',pages:[
   {t:"Kontrolle bestanden, kein Hund im Paket. Der Mops bleibt draußen. Er hat sich beschwert, aber das ist sein gutes Recht.",mood:'ok'},
   {t:"Schritt fünf: das zweite Zollquiz, die Montreal Bagels. Das Rezept kommt aus Kanada, also Übersee, und im Kochwasser ist Honig. Honig im Kochwasser gilt bei uns als meldepflichtiges Backgeheimnis. Ungefähr wie ein Raclette-Geheimnis, nur klebriger."},
@@ -408,52 +456,161 @@ const SC = {
  mid2:{p:84,leg:3,prop:'coffee',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Weiter mit Frage 5',pages:[
   {t:'Halbzeit. Ich muss etwas gestehen: Ich habe heute früh einen Bagel mit Frischkäse gegessen, ohne ihn anzumelden. Ich verzolle mich selbst. Das macht zwei Franken, zahlbar in Frischkäse.',mood:'ok'}]},
  final:{p:98,leg:3,prop:'stamp',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Stempel drauf',slam:true,pages:[
-  {t:'Alles geprüft: zwei Quizze bestanden, keine Hunde, Puls im Rahmen. Ich erteile hiermit die Zollfreigabe für Ihr Paket.',mood:'ok'},
+  {t:'Alles geprüft: zwei Quizze bestanden, keine Hunde, ein Schaf gerettet. Ich erteile hiermit die Zollfreigabe für Ihr Paket.',mood:'ok'},
   {t:'Und jetzt der wichtigste Teil meiner Arbeit: der Stempel. Dafür habe ich drei Jahre Ausbildung gemacht.'}]}
 };
 
-const QUIZ1 = {qs:[
- {tag:'Fachfrage, Single Choice',
-  q:'Eine Patientin verträgt keine Laktose, isst aber trotzdem Käsespätzle mit Bergkäse und ist glücklich. Warum geht es ihr gut?',
-  opts:['Die Laktose geht größtenteils mit der Molke ab, der Rest wird bei der Reifung zu Milchsäure vergoren','Der Käse hat ein Laktase-Abo im Darm abgeschlossen','Das Fett im Käse bindet die Laktose','Sie hat ein Attest vom Zöllner','Beim Erhitzen in der Pfanne wird die Laktose zerstört'],correct:0,
-  wr:[null,'Ein Abo? Der Darm kündigt sofort. Laktase bildet die Darmschleimhaut selbst, der Käse liefert sie nicht.','Fett bindet Laktose nicht. Das schafft höchstens das Sofa nach dem Essen.','Mein Attest ist leider kein Medizinprodukt. Ich habe es nachgeprüft.','Laktose ist hitzestabil. Die Pfanne ist kein Enzym, auch wenn sie sich Mühe gibt.'],
-  hint:'Denken Sie an die Käseherstellung: Was passiert mit der Molke und den Milchsäurebakterien?',
-  ok:'Richtig. Gereifter Bergkäse enthält kaum Laktose. Frischkäse sieht das ganz anders aus. Ein Attest vom Zöllner gilt übrigens nicht.'},
- {tag:'Fachfrage, Single Choice',
-  q:'Eine Prise Muskat im Spätzleteig ist Genuss. Mehrere Gramm sind eine ärztliche Vorstellung mit Halluzinationen. Wie heißt der verantwortliche Stoff?',
-  opts:['Capsaicin','Myristicin','Solanin','Mutter Natur','Thujon'],correct:1,
-  wr:['Capsaicin ist Chili. Wenn Sie Muskat so scharf finden, haben Sie ein anderes Problem.',null,'Solanin steckt in grünen Kartoffeln. Ich sehe Sie schon im Kartoffelacker.','Mutter Natur ist keine Substanz. Aber ich merke mir, dass Sie ihr vertrauen.','Thujon ist im Wermut. Das ist ein anderes Gelage.'],
-  hint:'Der Name erinnert an die Muskatnuss: Myristica fragrans.',
-  ok:'Richtig, Myristicin. Eine Prise ist unbedenklich, kritisch wird es erst bei mehreren Gramm, etwa einer ganzen Nuss. Bitte nicht probieren.'},
- {tag:'Allgemeinmedizin, Single Choice',
-  q:'Ein Gast hat eine fettreiche Portion Käsespätzle mit Speck, Butter und Röstzwiebeln verdrückt. Danach hat er kolikartige Schmerzen im rechten Oberbauch, die in die rechte Schulter ausstrahlen. Welches Organ ist am ehesten beteiligt?',
-  opts:['Gallenblase','Blinddarm','Niere','Die Pfanne','Das Herz vor Freude'],correct:0,
-  wr:[null,'Der Blinddarm sitzt rechts unten, McBurney lässt grüßen. Sie sind einen Quadranten zu tief.','Nierenkoliken wandern in die Flanke und zur Leiste, nicht in die Schulter. Gute Idee, falscher Ort.','Die Pfanne tut dem Patienten nicht weh. Höchstens dem Geldbeutel.','Das Herz vor Freude ist verständlich. Aber Schmerzen in der Schulter nach Fett sind Gallenblase, die Phrenicus-Verbindung lässt grüßen.'],
-  hint:'Fett löst eine Kontraktion der Gallenblase aus, und der Schmerz strahlt in die rechte Schulter aus.',
-  ok:'Richtig. Fettreiche Mahlzeit, Kolik im rechten Oberbauch, Ausstrahlung in die rechte Schulter: die Gallenblase, Murphy-Zeichen inklusive. Ich esse trotzdem weiter.'},
- {tag:'Fachfrage, Single Choice',
-  q:'Spätzleteig besteht aus Weizenmehl. Gegen welches Enzym richten sich bei Zöliakie die typischen Autoantikörper im Serum?',
-  opts:['Thyreoperoxidase','Gewebstransglutaminase','Glutamatdehydrogenase','Das Spätzle-Enzym','Pankreaslipase'],correct:1,
-  wr:['Thyreoperoxidase ist Hashimoto. Schön, dass Sie die Schilddrüse nicht vergessen haben.',null,'Die Glutamatdehydrogenase ist ein Leberenzym. Bitte nicht im Rausch raten.','Das Spätzle-Enzym gibt es nicht. Noch nicht. Ich schreibe es in meine Habilitation.','Pankreaslipase verdaut Fett, nicht Gluten. Aber ein schöner Versuch im Spätzle-Kontext.'],
-  hint:'Im Labor wird dafür ein IgA-Test gemacht, kurz tTG-IgA.',
-  ok:'Richtig. tTG-IgA ist der Screening-Marker. Für Betroffene sind Spätzle aus Weizenmehl tabu, das ist wirklich das Gegenteil von Sehnsucht.'},
- {tag:'Fachfrage, Single Choice',
-  q:'Beim Schneiden von Zwiebeln tränen die Augen. Welcher Stoff reizt die Hornhaut, und welcher Hirnnerv leitet den Reiz afferent weiter?',
-  opts:['Allicin, N. opticus','Syn-Propanthial-S-oxid, N. trigeminus','Capsaicin, N. vagus','Histamin, N. olfactorius','Der Schmerz über das Rezept, N. sentimentalis'],correct:1,
-  wr:['Allicin ist Knoblauch, und der Sehnerv sieht nur, er fühlt nichts. Sie verwechseln Gewürz und Gefühl.',null,'Capsaicin ist Chili, und der Vagus beruhigt eher. Ihr Puls darf sich also entspannen.','Der Riechnerv riecht, er schmerzt nicht. Und Histamin war nicht dabei.','Emotional nachvollziehbar, anatomisch nicht. Einen N. sentimentalis habe ich im Atlas nicht gefunden.'],
-  hint:'Allicin steckt im Knoblauch. Und das Sehen ist es nicht, es ist der Gefühlsnerv des Gesichts.',
-  ok:'Richtig. Der Reiz läuft über den N. trigeminus (V1), die Tränen kommen efferent über den N. facialis. Ein Reflexbogen in der Küche.'},
- {tag:'Notfallmedizin, Single Choice',
-  q:'Ein Gast mit bekannter Hühnereiallergie isst versehentlich Spätzle. Kurz darauf: Atemnot, Quaddeln am ganzen Körper und Blutdruckabfall. Was ist die wichtigste erste Maßnahme?',
-  opts:['Adrenalin intramuskulär in den lateralen Oberschenkel','Ein Antihistaminikum und abwarten','Kortison als Tablette mit einem Glas Wasser','Noch eine Portion zur Gewöhnung','Den Zöllner holen, der den Ausweis kontrolliert'],correct:0,
-  wr:[null,'Antihistaminika wirken zu langsam. Das ist keine Wartezeit, das ist ein Wettlauf.','Kortison braucht Stunden, der Patient hat Minuten. Das Glas Wasser ist nett.','Gewöhnung nennt man Hyposensibilisierung, und die findet nicht am Esstisch statt. Ich rufe den Rettungsdienst und Ihre Approbationsbehörde.','Der Zöllner ist gerade beschäftigt. Er kontrolliert eine Postkarte.'],
-  hint:'Es geht um Sekunden und um das Medikament, das in einem Autoinjektor steckt.',
-  ok:'Richtig. Adrenalin i.m. (typisch 0,3 bis 0,5 mg) in den lateralen Oberschenkel, dann Rettungsdienst und Lagerung. Alles andere kommt später.'},
- {tag:'Zusatzfrage zur Absenderin',
-  q:'Laut Akte macht Caro Gym, Pilates, Laufen und Tischtennis. Welche Sportart empfiehlt der Zoll nach einer großen Portion Käsespätzle?',
-  opts:['Gym','Pilates','Laufen','Tischtennis','Alle, in dieser Reihenfolge, nach dem Nachschlag'],correct:null,
-  anyOk:['Notiert. Gym nach Käsespätzle ist mutig.','Notiert. Pilates mit vollem Magen ist ein Abenteuer.','Notiert. Laufen mit Spätzle im Bauch ist ein Anfang.','Notiert. Tischtennis ist die sicherste Wahl, der Ball ist leicht.','Das ist die richtige Antwort. Caro würde zustimmen.']}
-]};
+const QUIZ1 = {
+ "qs": [
+  {
+   "tag": "Fachfrage, Single Choice",
+   "q": "Eine Patientin verträgt keine Laktose, isst aber trotzdem Käsespätzle mit Bergkäse und ist glücklich. Warum geht es ihr gut?",
+   "opts": [
+    "Die Laktose geht größtenteils mit der Molke ab, der Rest wird bei der Reifung zu Milchsäure vergoren",
+    "Der Käse hat im Darm ein Laktase-Abo abgeschlossen",
+    "Die Patientin hat mit dem Käse eine Absprache getroffen",
+    "Sie hat ein Attest vom Zöllner",
+    "Beim Erhitzen in der Pfanne gibt die Laktose freiwillig auf"
+   ],
+   "correct": 0,
+   "wr": [
+    null,
+    "Ein Abo? Der Darm kündigt sofort. Laktase bildet die Darmschleimhaut selbst, der Käse liefert sie nicht.",
+    "Verhandlungen mit Käse sind aussichtslos. Der Käse ist sehr stur.",
+    "Mein Attest ist leider kein Medizinprodukt. Ich habe es nachgeprüft.",
+    "Laktose ist hitzestabil und gibt nicht auf. Im Gegensatz zu Ihnen beim Quiz."
+   ],
+   "hint": "Denken Sie an die Käseherstellung: Was passiert mit der Molke und den Milchsäurebakterien?",
+   "ok": "Richtig. Gereifter Bergkäse enthält kaum Laktose. Frischkäse sieht das ganz anders aus. Ein Attest vom Zöllner gilt übrigens nicht."
+  },
+  {
+   "tag": "Fachfrage, Single Choice",
+   "q": "Eine Prise Muskat im Spätzleteig ist Genuss. Mehrere Gramm sind eine ärztliche Vorstellung mit Halluzinationen. Wie heißt der verantwortliche Stoff?",
+   "opts": [
+    "Capsaicin, die Rache der Chili",
+    "Myristicin",
+    "Solanin, die Rache der Kartoffel",
+    "Mutter Natur, die Rache der Mutter",
+    "Thujon, die Rache des Wermuts"
+   ],
+   "correct": 1,
+   "wr": [
+    "Capsaicin ist Chili, und die Rache der Chili erleben Sie erst morgen früh.",
+    null,
+    "Solanin steckt in grünen Kartoffeln. Ich sehe Sie schon im Kartoffelacker.",
+    "Mutter Natur ist keine Substanz. Aber ich merke mir, dass Sie ihr misstrauen.",
+    "Thujon ist im Wermut. Das ist ein anderes Gelage."
+   ],
+   "hint": "Der Name erinnert an die Muskatnuss: Myristica fragrans.",
+   "ok": "Richtig, Myristicin. Eine Prise ist unbedenklich, kritisch wird es erst bei mehreren Gramm, etwa einer ganzen Nuss. Bitte nicht probieren."
+  },
+  {
+   "tag": "Allgemeinmedizin, Single Choice",
+   "q": "Ein Gast hat eine fettreiche Portion Käsespätzle mit Speck, Butter und Röstzwiebeln verdrückt. Danach hat er kolikartige Schmerzen im rechten Oberbauch, die in die rechte Schulter ausstrahlen. Welches Organ ist am ehesten beteiligt?",
+   "opts": [
+    "Die Gallenblase, die gerade laut um Hilfe ruft",
+    "Der Blinddarm, der auch mal mitreden wollte",
+    "Die Niere, die nur zufällig vorbeikam",
+    "Die Pfanne",
+    "Das Herz vor Freude"
+   ],
+   "correct": 0,
+   "wr": [
+    null,
+    "Der Blinddarm sitzt rechts unten, McBurney lässt grüßen. Sie sind einen Quadranten zu tief.",
+    "Nierenkoliken wandern in die Flanke und zur Leiste, nicht in die Schulter. Gute Idee, falscher Ort.",
+    "Die Pfanne tut dem Patienten nicht weh. Höchstens dem Geldbeutel.",
+    "Das Herz vor Freude ist verständlich. Aber Schmerzen in der Schulter nach Fett sind Gallenblase, die Phrenicus-Verbindung lässt grüßen."
+   ],
+   "hint": "Fett löst eine Kontraktion der Gallenblase aus, und der Schmerz strahlt in die rechte Schulter aus.",
+   "ok": "Richtig. Fettreiche Mahlzeit, Kolik im rechten Oberbauch, Ausstrahlung in die rechte Schulter: die Gallenblase, Murphy-Zeichen inklusive. Ich esse trotzdem weiter."
+  },
+  {
+   "tag": "Fachfrage, Single Choice",
+   "q": "Spätzleteig besteht aus Weizenmehl. Gegen welches Enzym richten sich bei Zöliakie die typischen Autoantikörper im Serum?",
+   "opts": [
+    "Thyreoperoxidase, die Schilddrüsen-Diva",
+    "Gewebstransglutaminase",
+    "Glutamatdehydrogenase, das Leberenzym mit dem längsten Namen",
+    "Das Spätzle-Enzym, streng geheim",
+    "Pankreaslipase, die Fett-Fee"
+   ],
+   "correct": 1,
+   "wr": [
+    "Thyreoperoxidase ist Hashimoto. Schön, dass Sie die Schilddrüse nicht vergessen haben.",
+    null,
+    "Die Glutamatdehydrogenase ist ein Leberenzym. Bitte nicht im Rausch raten.",
+    "Das Spätzle-Enzym gibt es nicht. Noch nicht. Ich schreibe es in meine Habilitation.",
+    "Pankreaslipase verdaut Fett, nicht Gluten. Aber ein schöner Versuch im Spätzle-Kontext."
+   ],
+   "hint": "Im Labor wird dafür ein IgA-Test gemacht, kurz tTG-IgA.",
+   "ok": "Richtig. tTG-IgA ist der Screening-Marker. Für Betroffene sind Spätzle aus Weizenmehl tabu, das ist wirklich das Gegenteil von Sehnsucht."
+  },
+  {
+   "tag": "Fachfrage, Single Choice",
+   "q": "Beim Schneiden von Zwiebeln tränen die Augen. Welcher Stoff reizt die Hornhaut, und welcher Hirnnerv leitet den Reiz afferent weiter?",
+   "opts": [
+    "Allicin, N. opticus, der Nerv, der nur zusieht",
+    "Syn-Propanthial-S-oxid, N. trigeminus",
+    "Capsaicin, N. vagus, der Nerv für alles Mögliche",
+    "Histamin, N. olfactorius, der Riecher",
+    "Der Schmerz über das Rezept, N. sentimentalis"
+   ],
+   "correct": 1,
+   "wr": [
+    "Allicin ist Knoblauch, und der Sehnerv sieht nur, er fühlt nichts. Sie verwechseln Gewürz und Gefühl.",
+    null,
+    "Capsaicin ist Chili, und der Vagus beruhigt eher. Ihr Puls darf sich also entspannen.",
+    "Der Riechnerv riecht, er schmerzt nicht. Und Histamin war nicht dabei.",
+    "Emotional nachvollziehbar, anatomisch nicht. Einen N. sentimentalis habe ich im Atlas nicht gefunden."
+   ],
+   "hint": "Allicin steckt im Knoblauch. Und das Sehen ist es nicht, es ist der Gefühlsnerv des Gesichts.",
+   "ok": "Richtig. Der Reiz läuft über den N. trigeminus (V1), die Tränen kommen efferent über den N. facialis. Ein Reflexbogen in der Küche."
+  },
+  {
+   "tag": "Notfallmedizin, Single Choice",
+   "q": "Ein Gast mit bekannter Hühnereiallergie isst versehentlich Spätzle. Kurz darauf: Atemnot, Quaddeln am ganzen Körper und Blutdruckabfall. Was ist die wichtigste erste Maßnahme?",
+   "opts": [
+    "Adrenalin intramuskulär in den lateralen Oberschenkel",
+    "Ein Antihistaminikum und abwarten, ob es besser wird",
+    "Kortison als Tablette mit einem Glas Wasser, in aller Ruhe",
+    "Noch eine Portion zur Gewöhnung",
+    "Den Zöllner holen, der den Ausweis kontrolliert"
+   ],
+   "correct": 0,
+   "wr": [
+    null,
+    "Antihistaminika wirken zu langsam. Das ist keine Wartezeit, das ist ein Wettlauf.",
+    "Kortison braucht Stunden, der Patient hat Minuten. Das Glas Wasser ist nett.",
+    "Gewöhnung nennt man Hyposensibilisierung, und die findet nicht am Esstisch statt. Ich rufe den Rettungsdienst und Ihre Approbationsbehörde.",
+    "Der Zöllner ist gerade beschäftigt. Er kontrolliert eine Postkarte."
+   ],
+   "hint": "Es geht um Sekunden und um das Medikament, das in einem Autoinjektor steckt.",
+   "ok": "Richtig. Adrenalin i.m. (typisch 0,3 bis 0,5 mg) in den lateralen Oberschenkel, dann Rettungsdienst und Lagerung. Alles andere kommt später."
+  },
+  {
+   "tag": "Allgemeinmedizin, Single Choice",
+   "q": "Nach dem dritten Teller Käsespätzle befällt Sie eine bleierne Müdigkeit, das sogenannte Fresskoma. Welcher Teil des vegetativen Nervensystems hat dann das Kommando?",
+   "opts": [
+    "Der Sympathikus, der zur Flucht vor dem vierten Teller rät",
+    "Der Parasympathikus, der 'Rest and Digest' ruft",
+    "Der Nervus Spätzlicus",
+    "Das limbische System, weil Käse glücklich macht",
+    "Der Zöllner"
+   ],
+   "correct": 1,
+   "wr": [
+    "Der Sympathikus ist Kampf oder Flucht. Beim vierten Teller ist Kampf durchaus denkbar, aber hier gewinnt der andere.",
+    null,
+    "Den Nervus Spätzlicus gibt es nicht. Ich habe im Atlas nachgeschaut, unter S.",
+    "Das limbische System freut sich zwar, aber das Kommando hat es nicht. Es hat nur die Sofa-Gefühle.",
+    "Der Zöllner hat nur das Kommando über den Stempel."
+   ],
+   "hint": "Er ist der Gegenspieler von 'Kampf oder Flucht' und heißt auch 'Ruhe und Verdauung'.",
+   "ok": "Richtig. Nach dem Essen übernimmt der Parasympathikus: Verdauung an, Aktivität aus, Blut in den Darm. Das Fresskoma ist also reine Physiologie. Oder die Kapitulation vor dem Käse."
+  }
+ ]
+};
 
 const QUIZ2 = {qs:[
  {tag:'Erdkunde, Single Choice',
@@ -492,10 +649,27 @@ const QUIZ2 = {qs:[
   wr:['Die hereditäre Fruktoseintoleranz ist selten und hat andere Auslöser. Das war leider zu viel Dichtung.',null,'Salmonellen sind eher bei rohen Eiern ein Thema. Und die stecken, Sie erinnern sich, im Spätzleteig.','Die Bienen sind höchstens beleidigt, wenn man sie nach dem Honig fragt.','Honig hebt den Blutzucker eher an. Das wussten Sie als Arzt, und die Bagels sowieso.'],
   hint:'Es geht um einen Sporenbildner, den der Säuglingsdarm noch nicht abwehren kann.',
   ok:'Richtig. Die Sporen können im Säuglingsdarm auskeimen und Toxin bilden. Für Erwachsene ist Honig unproblematisch, auch im Bagel.'},
- {tag:'Abschlussfrage zur Absenderin',
-  q:'Laut Akte hat Caro ein Passfoto "final" genannt. Wie viele finale Versionen gibt es inzwischen?',
-  opts:['Eine','Zwei','Drei','Ich zähle nicht mehr'],correct:null,
-  anyOk:['Falsch, aber ich notiere es.','Notiert. Es gibt vermutlich noch eine mehr.','Notiert. Das Aktenzeichen lautet Passfoto-final-final.','Das ist die einzige ehrliche Antwort.']}
+ {
+ "tag": "Zusatzfrage zur Absenderin",
+ "q": "Caro war eine Zeit lang in Montreal. Wie viele Bagels hat sie dort durchschnittlich pro Woche verzehrt?",
+ "opts": [
+  "Einen, zur Probe",
+  "Zwei, aus Höflichkeit",
+  "Vier",
+  "Sieben, einen pro Tag, wie eine Tablette",
+  "Dreißig, laut Zöllner"
+ ],
+ "correct": 2,
+ "wr": [
+  "Ein einziger? Dann war sie nicht wirklich in Montreal.",
+  "Aus Höflichkeit? Bagels isst man aus Überzeugung.",
+  null,
+  "Sieben wäre eine Tablette pro Tag, aber so diszipliniert ist niemand.",
+  "Dreißig? Das wären über vier am Tag. Selbst der Zöllner glaubt das nicht."
+ ],
+ "hint": "Zwischen einem und sieben. Und es ist eine gerade Zahl.",
+ "ok": "Richtig: im Schnitt vier Bagels pro Woche. Das ist eine therapeutische Dosis. Für Montreal fast schon zurückhaltend."
+}
 ]};
 
 const WRONG = [
@@ -529,7 +703,7 @@ const CAP_ROUNDS = [
 const CAP_BAD_DOG = ['Stopp. In Ihrem Paket ist ein Hund. Der ist nicht deklariert. Bitte nochmals prüfen.','Das war ein Hund. Der Bagel hat sich beschwert.','Hund erkannt. Er schaut mich an. Das ist unangenehm.'];
 const CAP_BAD_MISS = ['Es wurden unverzollte Bagels übersehen. Bitte genauer hinsehen.','Da liegt noch ein Bagel. Er winkt Ihnen zu.','Da fehlt noch einer. Er schmollt schon.'];
 
-const STAU_MSG = [
+const STAU_MSG_UNUSED = [
  'Ein Ferrari überholt auf dem Pannenstreifen. Er steht kurz darauf auch.',
  'Eine Familie aus dem Aargau packt das Znüni aus.',
  'Ein Camper mit niederländischem Kennzeichen grüßt freundlich.',
@@ -714,29 +888,46 @@ function runQuiz(cfg, mount, secId, pLo, pHi, leg, mid, done){
   show();
 }
 
-/* ---- Gotthard-Stau ---- */
+/* ---- Schaf reanimieren ---- */
+const SHEEP_MSG = [
+ 'Fester drücken. Das Schaf ist aus Wolle, nicht aus Zuckerwatte.',
+ 'Tempo: 100 bis 120 pro Minute. Denken Sie an Stayin\' Alive.',
+ 'Das Schaf hat noch einen Spätzle im Mundwinkel. Ich lasse ihn dort.',
+ 'Gute Technik. Ein Kollege würde Sie anstellen.',
+ 'Brustkorb zwischendurch vollständig entlasten.',
+ 'Ein zweites Schaf schaut zu und macht Notizen.',
+ 'Ein paar Wanderer filmen. Bitte lächeln.',
+ 'Druckpunkt: Mitte des Brustkorbs. Beim Schaf dort, wo die Wolle am dicksten ist.',
+ 'Ihr eigener Puls steigt. Als Arzt wissen Sie, was das bedeutet.',
+ 'Der Hirte ruft Mäh. Das ist vermutlich Zustimmung.'
+];
 function startStau(){
-  const road = $('#road'); road.innerHTML = '';
-  for(let k=0;k<17;k++) road.appendChild(document.createElement('i'));
-  const cells = [...road.children];
-  let clicks = 0;
-  const honk = $('#honk');
-  honk.disabled = false; honk.textContent = `Hupen (noch ${HONKS}x)`;
-  honk.onclick = () => {
-    clicks++;
-    const left = HONKS - clicks;
-    const freed = Math.floor(clicks*17/HONKS);
-    cells.forEach((c,k)=>c.classList.toggle('free', k < freed));
-    $('#km').textContent = Math.max(0, 17 - clicks*17/HONKS).toFixed(1).replace('.',',');
-    $('#bpm').textContent = Math.round(72 + clicks*3.5);
-    setProg(54 + (clicks/HONKS)*10, 2);
-    if(left > 0){
-      honk.textContent = `Hupen (noch ${left}x)`;
-      $('#stautxt').textContent = STAU_MSG[(clicks-1) % STAU_MSG.length];
+  const COMPR = 30, BREATH = 2, TOTAL = COMPR + BREATH;
+  const btn = $('#honk'), sheep = $('#sheep');
+  let n = 0;
+  sheep.classList.remove('awake','press');
+  $('#cnt').textContent = '0'; $('#pulse').textContent = 'kein Puls'; $('#cprbar').style.width = '0';
+  $('#stautxt').textContent = 'Das Schaf liegt auf dem Rücken, alle Viere von sich gestreckt. Druckpunkt: Mitte des Brustkorbs. Jeder Klick ist ein Stoß.';
+  btn.disabled = false; btn.textContent = 'Herzdruckmassage (noch ' + COMPR + 'x)';
+  btn.onclick = () => {
+    n++;
+    sheep.classList.add('press'); setTimeout(()=>sheep.classList.remove('press'), 90);
+    $('#cprbar').style.width = (n/TOTAL*100) + '%';
+    setProg(54 + (n/TOTAL)*10, 2);
+    if(n < COMPR){
+      $('#cnt').textContent = n; btn.textContent = 'Herzdruckmassage (noch ' + (COMPR-n) + 'x)';
+      $('#stautxt').textContent = SHEEP_MSG[(n-1) % SHEEP_MSG.length];
+    } else if(n === COMPR){
+      $('#cnt').textContent = n; btn.textContent = 'Beatmen (noch ' + BREATH + 'x)';
+      $('#stautxt').textContent = 'Dreißig Kompressionen geschafft. Jetzt zweimal beatmen, Mund zu Schnauze. Bitte nur, wenn Sie sich trauen.';
+    } else if(n < TOTAL){
+      btn.textContent = 'Beatmen (noch ' + (TOTAL-n) + 'x)';
+      $('#stautxt').textContent = 'Eine Beatmung ist durch. Das Schaf riecht nach Spätzle, das ist normal.';
     } else {
-      honk.disabled = true; honk.textContent = 'Protokoll abgeschlossen';
-      $('#stautxt').textContent = 'Der Stau ist rekonstruiert und aufgelöst. Ihr Puls liegt bei 142. Das Protokoll ist vollständig.';
-      setTimeout(()=>scene(SC.wallis, ()=>{ go('s-cap', 66, 3); startCaptcha(); }), FAST?600:2400);
+      sheep.classList.add('awake'); $('#pulse').textContent = '84 pro Minute';
+      btn.disabled = true; btn.textContent = 'Schaf lebt';
+      $('#stautxt').textContent = 'Spontankreislauf zurück. Das Schaf blinzelt, steht auf und sucht den nächsten Teller. Reanimation erfolgreich.';
+      setTimeout(()=>scene(SC.wallis, ()=>{ go('s-cap', 66, 3); startCaptcha(); }), FAST?600:3200);
     }
   };
 }
