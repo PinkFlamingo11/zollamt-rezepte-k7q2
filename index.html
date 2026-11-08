@@ -89,6 +89,7 @@ table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
 .card .in b{display:block;margin-bottom:2px}
 .card .btn{margin:0;border-top:1px solid var(--ink)}
 .small{font-size:13px;color:var(--mute)}
+.ticker.swap{animation:pop .3s}
 .ticker{min-height:46px;font-size:15px;color:var(--mute);margin:8px 0}
 
 /* Rückmeldung des Zöllners (klein, inline) */
@@ -541,11 +542,21 @@ const STAU_MSG = [
  'Ein Murmeltier schaut aus dem Gras und schüttelt den Kopf.'
 ];
 const WAIT_MSG = [
- 'Durchsage: Bitte halten Sie Ihre Rezepte bereit.',
- 'Durchsage: Ihre Nummer wird in Kürze aufgerufen.',
- 'Durchsage: Der Zöllner ist kurz in der Pause. Er isst gerade Spätzle.',
- 'Durchsage: Bitte nicht mit dem Zöllner sprechen, er zählt.',
- 'Durchsage: Vor Ihnen war eine Person mit einem Käse ohne Anmeldung.'
+ "Durchsage: Aktuell ist hier viel los. Danke für Ihre Geduld.",
+ "Durchsage: Bitte halten Sie Ihre Rezepte bereit.",
+ "Durchsage: Der Zöllner ist kurz in der Pause. Er isst gerade Spätzle.",
+ "Durchsage: Bitte nicht mit dem Zöllner sprechen, er zählt.",
+ "Durchsage: Vor Ihnen war eine Person mit einem Käse ohne Anmeldung.",
+ "Durchsage: Wer einen Bagel dabei hat, bitte sofort melden. Wer einen Hund dabei hat, bitte auch.",
+ "Durchsage: Der Kaffeeautomat ist defekt. Der Zöllner ist es nicht.",
+ "Durchsage: Bitte Abstand halten. Mindestens eine Raclette-Länge.",
+ "Durchsage: Ihre Wartezeit beträgt ungefähr eine Minute. Oder eine Ewigkeit, je nach Zöllner.",
+ "Durchsage: Ein Murmeltier hat sich vorgedrängelt. Wir prüfen den Fall.",
+ "Durchsage: Bitte legen Sie keine Rösti auf das Förderband. Das ist kein Büffet.",
+ "Durchsage: Falls Sie Ihre Nummer verloren haben: Es ist die 4711.",
+ "Durchsage: Der Zöllner bittet um Ruhe. Er prüft gerade einen Stempel auf Echtheit.",
+ "Durchsage: Hinweis für Ärzte im Wartebereich: Bitte keine Ferndiagnosen am Zöllner.",
+ "Durchsage: Ihre Nummer wird in Kürze aufgerufen. In Schweizer Zeit heißt das: gleich."
 ];
 
 /* ============ Hilfen ============ */
@@ -626,7 +637,7 @@ function startWait(){
     $('#waitbar').style.width = (frac*100)+'%';
     $('#serving').textContent = 'Aktuell bedient: ' + (4706 + Math.min(4, Math.floor(frac*5)));
     const mi = Math.min(WAIT_MSG.length-1, Math.floor(frac*WAIT_MSG.length));
-    if(mi !== lastMsg){ lastMsg = mi; $('#waitmsg').textContent = WAIT_MSG[mi]; }
+    if(mi !== lastMsg){ lastMsg = mi; const w = $('#waitmsg'); w.classList.remove('swap'); void w.offsetWidth; w.textContent = WAIT_MSG[mi]; w.classList.add('swap'); }
     if(left === 0){
       clearInterval(tick);
       $('#serving').textContent = 'Aktuell bedient: 4711';
