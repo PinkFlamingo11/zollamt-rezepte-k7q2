@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Eidgenössische Zollverwaltung, Abteilung Rezepte</title>
+<style>
+:root{--red:#D8232A;--ink:#141414;--mute:#666;--tint:#F3F1EC;--navy:#2F3E4E}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#fff;color:var(--ink);font:17px/1.45 "Helvetica Neue",Helvetica,Arial,sans-serif}
+header.top{border-bottom:1px solid var(--ink)}
+.top-in{max-width:560px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.cross{width:34px;height:34px;background:var(--red);position:relative;flex:none}
+.cross::before,.cross::after{content:"";position:absolute;background:#fff}
+.cross::before{left:14px;top:7px;width:6px;height:20px}
+.cross::after{left:7px;top:14px;width:20px;height:6px}
+.brand b{display:block;font-size:15px;line-height:1.15}
+.brand span{font-size:13px;color:var(--mute)}
+.route{max-width:560px;margin:0 auto;padding:10px 16px 12px}
+.route .legs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.route .leg{height:4px;background:#ddd;position:relative}
+.route .leg i{position:absolute;inset:0;width:0;background:var(--red);transition:width .5s}
+.route .names{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:12px;color:var(--mute);margin-top:5px}
+.route .names span.on{color:var(--ink);font-weight:700}
+.route .pct{font-size:13px;margin-top:6px;color:var(--mute)}
+main{max-width:560px;margin:0 auto;padding:18px 16px 60px}
+section{display:none}
+section.on{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h1{font-size:28px;line-height:1.12;margin:0 0 12px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;line-height:1.3;margin:6px 0 14px;font-weight:700}
+p{margin:0 0 12px}
+.muted{color:var(--mute);font-size:14px}
+.btn{display:block;width:100%;background:var(--red);color:#fff;border:0;border-radius:0;padding:16px;font:inherit;font-weight:700;cursor:pointer;margin-top:14px;text-align:center;text-decoration:none}
+.btn:disabled{background:#d6d6d6;cursor:not-allowed}
+.btn:active:not(:disabled){transform:translateY(1px)}
+table.meta{width:100%;border-collapse:collapse;margin:16px 0}
+table.meta td{border-top:1px solid var(--ink);padding:9px 0;vertical-align:top;font-size:15px}
+table.meta tr:last-child td{border-bottom:1px solid var(--ink)}
+table.meta td:first-child{color:var(--mute);width:42%;padding-right:10px}
+.ticket{border:1px solid var(--ink);display:flex}
+.ticket .stub{background:var(--red);color:#fff;padding:14px 12px;width:84px;flex:none;font-size:13px;line-height:1.2;display:flex;flex-direction:column;justify-content:space-between}
+.ticket .body{padding:14px 16px;flex:1;border-left:2px dashed var(--ink)}
+.big{font:700 64px/1 ui-monospace,Menlo,Consolas,monospace;margin:4px 0 2px}
+.count{font:700 54px/1 ui-monospace,Menlo,Consolas,monospace}
+.bar{height:6px;background:#ddd;margin:14px 0 8px}
+.bar i{display:block;height:100%;width:0;background:var(--ink)}
+.qmeta{font-size:14px;color:var(--mute);border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:12px;display:flex;justify-content:space-between;gap:10px}
+.opt{display:flex;gap:12px;width:100%;text-align:left;background:#fff;color:var(--ink);border:1px solid var(--ink);border-radius:0;padding:11px 13px;margin:0 0 8px;font:inherit;font-size:16px;line-height:1.35;cursor:pointer}
+.opt b{flex:none;width:1.3em}
+.opt:active:not(:disabled){background:var(--tint)}
+.opt.ok{background:var(--ink);color:#fff;border-color:var(--ink)}
+.opt.bad{border-color:var(--red);color:var(--red);text-decoration:line-through}
+.opt.shake{animation:shake .35s}
+@keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.field{margin:0 0 16px}
+.field label.t{display:block;font-size:14px;color:var(--mute);margin-bottom:5px}
+.field input[type=text],.field select{width:100%;border:1px solid var(--ink);border-radius:0;padding:12px;font:inherit;background:#fff}
+.field input[disabled]{background:var(--tint)}
+.radio{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid #ccc;cursor:pointer}
+.radio input{margin-top:5px;accent-color:var(--red)}
+.road{display:grid;grid-template-columns:repeat(17,1fr);gap:2px;margin:16px 0 6px}
+.road i{height:34px;background:var(--red);transition:background .25s}
+.road i.free{background:#fff;border:1px solid #bbb}
+.stats{display:flex;justify-content:space-between;font-size:15px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:8px 0;margin-bottom:12px}
+.stats b{font-family:ui-monospace,Menlo,monospace}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:12px 0}
+.tile{position:relative;aspect-ratio:1;border:0;padding:0;background:#ddd;cursor:pointer;overflow:hidden}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.tile.sel{outline:5px solid var(--red);outline-offset:-5px}
+.tile.sel::after{content:"";position:absolute;top:6px;left:6px;width:22px;height:22px;background:var(--red)}
+.tile.sel::before{content:"";position:absolute;top:10px;left:13px;width:6px;height:12px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(40deg);z-index:2}
+.doc{position:relative;border:1px solid var(--ink);padding:18px 16px;background:#fff;overflow:hidden}
+.doc.thud{animation:thud .3s}
+@keyframes thud{40%{transform:translateY(5px) scale(.995)}100%{transform:none}}
+.doc h2{margin:0 0 2px}
+.stamp{position:absolute;right:8px;bottom:34px;transform:rotate(-9deg);border:5px solid var(--red);outline:2px solid var(--red);outline-offset:3px;color:var(--red);font-weight:900;font-size:27px;line-height:1.05;padding:8px 14px;text-align:center;opacity:0;mix-blend-mode:multiply;filter:url(#rough);pointer-events:none}
+.stamp small{display:block;font-size:13px;font-weight:700;margin-top:4px}
+.stamp.go{animation:stamp .5s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes stamp{0%{opacity:0;transform:rotate(-26deg) scale(3.4)}55%{opacity:1;transform:rotate(-9deg) scale(.93)}75%{transform:rotate(-9deg) scale(1.04)}100%{opacity:.92;transform:rotate(-9deg) scale(1)}}
+.dl{display:none;margin-top:22px}
+.dl.on{display:block;animation:fade .5s}
+.fee{border-left:4px solid var(--red);background:var(--tint);padding:10px 14px;margin:0 0 16px;font-size:16px}
+.card{border:1px solid var(--ink);margin-bottom:14px}
+.card img{display:block;width:100%;border-bottom:1px solid var(--ink)}
+.card .in{padding:12px 14px}
+.card .in b{display:block;margin-bottom:2px}
+.card .btn{margin:0;border-top:1px solid var(--ink)}
+.small{font-size:13px;color:var(--mute)}
+.ticker{min-height:46px;font-size:15px;color:var(--mute);margin:8px 0}
+
+/* Rückmeldung des Zöllners (klein, inline) */
+.fb{display:flex;gap:10px;align-items:flex-start;border-left:4px solid var(--red);background:var(--tint);padding:9px 12px;margin:12px 0 0;font-size:15.5px;line-height:1.4;animation:pop .25s}
+.fb[hidden]{display:none}
+.fb.good{border-left-color:var(--ink)}
+.fb .mini{width:40px;height:50px;flex:none}
+.fb b{font-size:12.5px;color:var(--mute);font-weight:400;display:block;margin-bottom:1px}
+@keyframes pop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* Szene mit großem Zöllner */
+#s-scene{text-align:center}
+.sbubble{border:1px solid var(--ink);padding:12px 14px 14px;margin:0 0 20px;text-align:left;position:relative;font-size:18px;line-height:1.42;min-height:150px;background:#fff;cursor:pointer}
+.sbubble::before{content:"";position:absolute;left:50%;margin-left:-11px;bottom:-12px;border:11px solid transparent;border-top-color:var(--ink);border-bottom:0}
+.sbubble::after{content:"";position:absolute;left:50%;margin-left:-9px;bottom:-10px;border:9px solid transparent;border-top-color:#fff;border-bottom:0}
+.sbubble .who{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mute);margin-bottom:4px}
+.sbubble .skip{visibility:hidden}
+.sbubble.typing .skip{visibility:visible}
+.stage{max-width:340px;margin:0 auto;overflow:hidden}
+.stage svg{display:block;width:100%;height:auto}
+.stage.enter .offg{animation:rise .8s cubic-bezier(.2,1.25,.4,1)}
+.stage.leave .offg{animation:drop .4s ease-in forwards}
+@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+@keyframes drop{to{transform:translateY(105%)}}
+#sceneBtn[hidden]{display:none}
+
+/* Figur */
+.off .prop{display:none}
+.off.p-coffee .coffee,.off.p-plate .plate,.off.p-navi .navi,.off.p-stamp .paper{display:block}
+.off .steam{animation:steam 2s ease-in-out infinite}
+@keyframes steam{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.9;transform:translateY(-3px)}}
+.off .body{animation:breathe 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes breathe{50%{transform:translateY(-1.5px)}}
+.off .eye{transform-box:fill-box;transform-origin:center;animation:blink 4.2s infinite}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+.off .pupil{animation:look 7s infinite}
+@keyframes look{0%,40%,100%{transform:translateX(0)}48%,60%{transform:translateX(2.4px)}70%,85%{transform:translateX(-2.4px)}}
+.off .brow{transform-box:fill-box;transform-origin:center;transition:transform .2s}
+.off .mouth{transform-box:fill-box;transform-origin:50% 0;transition:transform .15s}
+.off.talk .mouth{animation:talk .2s steps(1) infinite}
+@keyframes talk{0%{transform:scaleY(1)}50%{transform:scaleY(2.6)}}
+.off.m-ok .brow{transform:translateY(-3px)}
+.off.m-ok .mouth{transform:scale(1.5,1)}
+.off.m-ok .head{animation:nod .5s}
+@keyframes nod{30%{transform:translateY(3px)}60%{transform:translateY(-1px)}}
+.off.m-bad .brow.l{transform:rotate(16deg) translateY(1px)}
+.off.m-bad .brow.r{transform:rotate(-16deg) translateY(1px)}
+.off.m-bad .head{animation:headshake .5s;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes headshake{20%{transform:translateX(-3px) rotate(-2deg)}40%{transform:translateX(3px) rotate(2deg)}60%{transform:translateX(-2px)}80%{transform:translateX(2px)}}
+.off .arm{transform-box:fill-box;transform-origin:50% 100%}
+.off.slam .arm{animation:slam .9s ease-in-out}
+@keyframes slam{0%{transform:translateY(0)}35%{transform:translateY(-26px) rotate(-6deg)}60%{transform:translateY(14px)}75%{transform:translateY(4px)}100%{transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4"/></filter>
+  <symbol id="face" viewBox="22 14 76 96">
+    <polygon points="31,58 25,62 24,74 31,78" fill="#E5B48E"/><polygon points="89,58 95,62 96,74 89,78" fill="#E5B48E"/>
+    <polygon points="34,44 86,44 91,68 80,96 60,106 40,96 29,68" fill="#EFC49F"/>
+    <polygon points="31,46 36,18 84,18 89,46" fill="#2F3E4E"/><rect x="31" y="37" width="58" height="9" fill="#D8232A"/>
+    <polygon points="24,50 96,50 90,57 30,57" fill="#1E2833"/>
+    <rect x="54" y="23" width="12" height="12" fill="#D8232A"/><rect x="59" y="25" width="2.4" height="8" fill="#fff"/><rect x="56.2" y="27.8" width="8" height="2.4" fill="#fff"/>
+    <rect x="40" y="65" width="14" height="10" fill="#fff"/><rect x="45" y="66" width="5" height="8" fill="#1E2833"/>
+    <rect x="66" y="65" width="14" height="10" fill="#fff"/><rect x="71" y="66" width="5" height="8" fill="#1E2833"/>
+    <rect x="38" y="58" width="18" height="4" fill="#4A2F1B"/><rect x="64" y="58" width="18" height="4" fill="#4A2F1B"/>
+    <polygon points="57,70 63,70 67,84 53,84" fill="#D9A07A"/>
+    <rect x="54" y="93" width="12" height="3" fill="#7A2E2E"/>
+    <polygon points="36,85 60,80 84,85 78,94 60,89 42,94" fill="#4A2F1B"/>
+  </symbol>
+</svg>
+
+<header class="top">
+  <div class="top-in">
+    <div class="cross" aria-hidden="true"></div>
+    <div class="brand"><b>Eidgenössische Zollverwaltung</b><span>Abteilung Rezepte</span></div>
+  </div>
+  <div class="route">
+    <div class="legs"><div class="leg"><i></i></div><div class="leg"><i></i></div><div class="leg"><i></i></div><div class="leg"><i></i></div></div>
+    <div class="names"><span>Köln</span><span>Basel</span><span>Gotthard</span><span>Wallis</span></div>
+    <div class="pct" id="pct">Grenze: 0 Prozent passiert</div>
+  </div>
+</header>
+
+<main>
+
+<section id="s-start" class="on">
+  <h1>Sendung für Tobi</h1>
+  <p><b>Sind Sie bereit für den Zollprozess?</b></p>
+  <p>Das kann einige Minuten in Anspruch nehmen. Am besten nehmen Sie sich Zeit. Falls es gerade nicht passt, nehmen Sie sich einen Kaffee und kommen Sie später noch einmal.</p>
+  <table class="meta">
+    <tr><td>Absenderin</td><td>Caro, Köln (Deutschland)</td></tr>
+    <tr><td>Empfänger</td><td>Tobi, Wallis (Schweiz)</td></tr>
+    <tr><td>Inhalt</td><td>2 Rezepte, kulinarische Güter</td></tr>
+    <tr><td>Warenwert</td><td>unbezahlbar</td></tr>
+    <tr><td>Sendungsnummer</td><td id="sendnr">CH-WS-0711</td></tr>
+  </table>
+  <button class="btn" id="startBtn">Start</button>
+</section>
+
+<!-- Szene: großer Zöllner -->
+<section id="s-scene">
+  <div class="sbubble" id="sbubble"><div class="who"><span id="whoTxt">Zöllner Imboden</span><span class="skip">Tippen: Text überspringen</span></div><div id="sbub"></div></div>
+  <div class="stage" id="stage">
+    <svg class="off" id="sceneOff" viewBox="0 0 240 190" aria-hidden="true">
+      <g transform="translate(60,0)"><g class="offg">
+        <g class="body">
+          <polygon points="6,150 12,114 38,102 82,102 108,114 114,150" fill="#2F3E4E"/>
+          <polygon points="12,114 38,102 36,118 16,128" fill="#26323F"/>
+          <polygon points="14,112 34,104 36,110 16,118" fill="#D8232A"/>
+          <polygon points="106,112 86,104 84,110 104,118" fill="#D8232A"/>
+          <polygon points="46,102 60,122 74,102" fill="#fff"/>
+          <polygon points="57,112 63,112 65,134 60,141 55,134" fill="#D8232A"/>
+          <rect x="20" y="124" width="14" height="14" fill="#D8232A"/>
+          <rect x="26" y="126" width="2.6" height="10" fill="#fff"/>
+          <rect x="22.3" y="129.7" width="10" height="2.6" fill="#fff"/>
+          <rect x="50" y="90" width="20" height="14" fill="#D9A07A"/>
+          <g class="head">
+            <polygon points="31,58 25,62 24,74 31,78" fill="#E5B48E"/>
+            <polygon points="89,58 95,62 96,74 89,78" fill="#E5B48E"/>
+            <polygon points="34,44 86,44 91,68 80,96 60,106 40,96 29,68" fill="#EFC49F"/>
+            <polygon points="31,46 36,18 84,18 89,46" fill="#2F3E4E"/>
+            <rect x="31" y="37" width="58" height="9" fill="#D8232A"/>
+            <polygon points="24,50 96,50 90,57 30,57" fill="#1E2833"/>
+            <rect x="54" y="23" width="12" height="12" fill="#D8232A"/>
+            <rect x="59" y="25" width="2.4" height="8" fill="#fff"/>
+            <rect x="56.2" y="27.8" width="8" height="2.4" fill="#fff"/>
+            <g class="eye"><rect x="40" y="65" width="14" height="10" fill="#fff"/><rect class="pupil" x="45" y="66" width="5" height="8" fill="#1E2833"/></g>
+            <g class="eye"><rect x="66" y="65" width="14" height="10" fill="#fff"/><rect class="pupil" x="71" y="66" width="5" height="8" fill="#1E2833"/></g>
+            <rect class="brow l" x="38" y="58" width="18" height="4" fill="#4A2F1B"/>
+            <rect class="brow r" x="64" y="58" width="18" height="4" fill="#4A2F1B"/>
+            <polygon points="57,70 63,70 67,84 53,84" fill="#D9A07A"/>
+            <g class="mouth"><rect x="54" y="93" width="12" height="3" fill="#7A2E2E"/></g>
+            <polygon points="36,85 60,80 84,85 78,94 60,89 42,94" fill="#4A2F1B"/>
+          </g>
+          <g class="arm">
+            <polygon points="98,114 112,122 110,146 96,146" fill="#26323F"/>
+            <rect x="97" y="104" width="12" height="12" fill="#EFC49F"/>
+            <rect x="100" y="86" width="6" height="20" fill="#6B4A2B"/>
+            <rect x="92" y="80" width="22" height="8" fill="#D8232A"/>
+          </g>
+        </g>
+      </g></g>
+      <!-- Schalter -->
+      <rect x="0" y="138" width="240" height="52" fill="#6B4A2B"/>
+      <rect x="0" y="138" width="240" height="6" fill="#4F3720"/>
+      <rect x="62" y="156" width="116" height="22" fill="#D8232A"/>
+      <text id="signTxt" x="120" y="171" font-size="10.5" font-weight="700" text-anchor="middle" fill="#fff" font-family="Helvetica,Arial,sans-serif">SCHALTER 3</text>
+      <!-- Requisiten -->
+      <g class="prop coffee">
+        <rect x="30" y="118" width="22" height="20" fill="#fff" stroke="#141414" stroke-width="1.6"/>
+        <rect x="52" y="123" width="8" height="9" fill="none" stroke="#141414" stroke-width="1.6"/>
+        <rect x="31.5" y="119.5" width="19" height="5" fill="#4A2F1B"/>
+        <path class="steam" d="M37 114 q-3 -5 0 -9 q3 -4 0 -8" stroke="#999" fill="none" stroke-width="1.6"/>
+        <path class="steam" style="animation-delay:.6s" d="M45 114 q-3 -5 0 -9 q3 -4 0 -8" stroke="#999" fill="none" stroke-width="1.6"/>
+      </g>
+      <g class="prop plate">
+        <ellipse cx="44" cy="136" rx="28" ry="6" fill="#fff" stroke="#141414" stroke-width="1.6"/>
+        <ellipse cx="32" cy="130" rx="6" ry="3.6" fill="#E8C35A"/><ellipse cx="42" cy="127" rx="6" ry="3.6" fill="#E8C35A"/>
+        <ellipse cx="52" cy="130" rx="6" ry="3.6" fill="#E8C35A"/><ellipse cx="38" cy="133" rx="6" ry="3.4" fill="#E8C35A"/>
+        <ellipse cx="48" cy="133" rx="6" ry="3.4" fill="#E8C35A"/>
+        <rect x="40" y="124" width="9" height="3" fill="#A8322D"/><rect x="28" y="127" width="6" height="2.4" fill="#4E8B3A"/>
+        <rect x="70" y="118" width="2.4" height="18" fill="#141414"/><rect x="67" y="118" width="8" height="2.4" fill="#141414"/>
+      </g>
+      <g class="prop navi">
+        <rect x="22" y="100" width="32" height="38" fill="#1E2833"/>
+        <rect x="25" y="104" width="26" height="27" fill="#fff"/>
+        <polyline points="28,127 34,118 41,122 48,108" fill="none" stroke="#D8232A" stroke-width="2.4"/>
+        <rect x="45" y="106" width="4" height="4" fill="#141414"/>
+      </g>
+      <g class="prop paper">
+        <rect x="160" y="128" width="46" height="9" fill="#fff" stroke="#141414" stroke-width="1.4"/>
+        <rect x="165" y="131" width="26" height="1.6" fill="#999"/><rect x="165" y="134" width="18" height="1.6" fill="#999"/>
+      </g>
+    </svg>
+  </div>
+  <button class="btn" id="sceneBtn" hidden>Weiter</button>
+</section>
+
+<section id="s-wait">
+  <h1>Zollstelle Köln: Ihre Wartenummer</h1>
+  <div class="ticket">
+    <div class="stub"><span>Schalter</span><span>3</span></div>
+    <div class="body">
+      <div class="muted">Nummer</div>
+      <div class="big">4711</div>
+      <div class="muted" id="serving">Aktuell bedient: 4706</div>
+    </div>
+  </div>
+  <div style="margin-top:20px">
+    <div class="muted">Geschätzte Wartezeit</div>
+    <div class="count" id="count">01:00</div>
+    <div class="bar"><i id="waitbar"></i></div>
+    <div class="ticker" id="waitmsg">Durchsage: Bitte halten Sie Ihre Rezepte bereit.</div>
+  </div>
+</section>
+
+<section id="s-pers">
+  <h1>Zollstelle Köln, Schalter 3</h1>
+  <p class="muted">Angaben zur Person und zum Zweck der Einfuhr.</p>
+  <div class="field"><label class="t">Name des Empfängers</label><input type="text" value="Tobi" disabled></div>
+  <div class="field"><label class="t" for="job">Beruf</label>
+    <select id="job"><option value="">Bitte wählen</option><option>Ärztin / Arzt</option><option>Professioneller Schläfer</option><option>Käsespätzle-Qualitätsprüfer</option><option>Bagel-Beauftragter</option><option>Spätzle-Sachverständiger</option><option>Hauptberuflich hungrig</option><option>Pfannen-Flüsterer</option><option>Gotthard-Stauexperte</option><option>Sonstiges</option></select></div>
+  <div class="field"><label class="t">Zweck der Einfuhr</label>
+    <label class="radio"><input type="radio" name="why" value="a"><span>Umzug: Die Rezepte ziehen mit mir ins Wallis</span></label>
+    <label class="radio"><input type="radio" name="why" value="b"><span>Sehnsucht nach leckeren Käsespätzle</span></label>
+    <label class="radio"><input type="radio" name="why" value="c"><span>Ich habe einfach Hunger</span></label>
+  </div>
+  <div class="fb" id="persfb" hidden></div>
+  <button class="btn" id="persBtn" disabled>Angaben bestätigen</button>
+</section>
+
+<section id="s-q1">
+  <h1>Zollquiz 1 von 2</h1>
+  <p class="muted">Grenzübergang Basel. Position 1: Südtiroler Käsespätzle. Warenursprung: Südtirol, Italien.</p>
+  <div id="quiz1"></div>
+</section>
+
+<section id="s-stau">
+  <h1>Stau vor dem Gotthard</h1>
+  <div class="stats"><span>Stau: <b id="km">17,0</b> km</span><span>Ihr Puls: <b id="bpm">72</b> bpm</span></div>
+  <div class="road" id="road"></div>
+  <div class="fb" id="staufb"><svg class="mini" viewBox="22 14 76 96"><use href="#face"/></svg><div><b>Zöllner Imboden, per Funk aus dem Stau</b><span id="stautxt">Die Kolonne steht. Es ist 14:32 Uhr und es sieht nicht gut aus.</span></div></div>
+  <button class="btn" id="honk">Hupen (noch 20x)</button>
+</section>
+
+<section id="s-cap">
+  <h1>Zollamt Wallis</h1>
+  <p class="muted">Röntgenkontrolle des Handgepäcks.</p>
+  <h2 id="capq">Wählen Sie alle Bilder mit Bagel aus.</h2>
+  <div class="grid" id="capgrid"></div>
+  <div class="fb" id="capfb" hidden></div>
+  <button class="btn" id="capBtn">Bestätigen</button>
+  <p class="small" style="margin-top:10px" id="capnote">Kontrolle 1 von 2</p>
+</section>
+
+<section id="s-q2">
+  <h1>Zollquiz 2 von 2</h1>
+  <p class="muted">Zollamt Wallis. Position 2: Montreal Bagels. Warenursprung: Kanada, Übersee.</p>
+  <div id="quiz2"></div>
+</section>
+
+<section id="s-stamp">
+  <div class="doc" id="doc">
+    <div class="muted">Zollbeleg</div>
+    <h2>Sendung CH-WS-<span id="belegnr">0711</span></h2>
+    <table class="meta">
+      <tr><td>Absenderin</td><td>Caro, Köln (DE)</td></tr>
+      <tr><td>Empfänger</td><td>Tobi, Wallis (CH)</td></tr>
+      <tr><td>Position 1</td><td>Südtiroler Käsespätzle<br><span class="muted">Zollquiz bestanden</span></td></tr>
+      <tr><td>Position 2</td><td>Montreal Bagels<br><span class="muted">Zollquiz bestanden, Hunde nicht eingeführt</span></td></tr>
+      <tr><td>Zollgebühr</td><td>Eine Postkarte aus der schönen Schweiz an Caro</td></tr>
+      <tr><td>Datum</td><td id="belegdate"></td></tr>
+      <tr><td>Zollbeamter</td><td>Imboden, Zollamt Wallis</td></tr>
+    </table>
+    <div style="height:96px"></div>
+    <div class="stamp" id="stampEl">ZOLLFREIGABE<small>Zollamt Wallis</small></div>
+  </div>
+  <div class="dl" id="dl">
+    <h1 style="margin-top:22px">Die Rezepte sind freigegeben</h1>
+    <div class="fb"><svg class="mini" viewBox="22 14 76 96"><use href="#face"/></svg><div><b>Zöllner Imboden</b>Gute Reise und en Guete, Tobi. Eine Sache noch: Die Zollgebühr ist eine Postkarte aus der schönen Schweiz an Caro. Ich kontrolliere das.</div></div>
+    <div style="height:16px"></div>
+    <div class="card">
+      <img src="rezepte/suedtiroler-kaesespaetzle.png" alt="Südtiroler Käsespätzle">
+      <div class="in"><b>Südtiroler Käsespätzle</b><span class="small">PNG-Bild</span></div>
+      <a class="btn" href="rezepte/suedtiroler-kaesespaetzle.png" download="Südtiroler Käsespätzle.png">Herunterladen</a>
+    </div>
+    <div class="card">
+      <img src="rezepte/montreal-bagels.png" alt="Montreal Bagels">
+      <div class="in"><b>Montreal Bagels</b><span class="small">PNG-Bild</span></div>
+      <a class="btn" href="rezepte/montreal-bagels.png" download="Montreal Bagels.png">Herunterladen</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ============ Inhalt (hier leicht änderbar) ============ */
+const FAST = location.search.includes('fast');
+const WAIT_SECONDS = FAST ? 4 : 60;
+const TYPE_MS = FAST ? 1 : 16;
+const HONKS = 20;
+
+/* ---- Szenen mit großem Zöllner ---- */
+const SC = {
+ start:{p:3,leg:0,prop:'',sign:'ZOLLSTELLE KÖLN',who:'Zöllner Imboden, per Video',btn:'Wartenummer ziehen',pages:[
+  {t:'Grüezi, Tobi. Ich bin Zöllner Imboden vom Zollamt Wallis. Ihre Sendung steht aber noch in Köln, bei Caro. Weil die Kölner Kollegen gerade Kaffeepause haben, vertrete ich sie per Videoschalte. Das ist völlig normal, Schweizer Effizienz.'},
+  {t:'Auf meinem Tisch, also auf Ihrem Bildschirm, liegt eine Sendung: zwei Rezepte, keine Anmeldung, kein Kaffee. Sehr verdächtig.'},
+  {t:'Ich begleite die Sendung auf der ganzen Reise: Köln, Basel, Gotthard, Wallis. An jeder Station erkläre ich Ihnen, was passiert, damit Sie nicht denken, das ist alles nur ein Scherz. Es ist ein amtlicher Scherz.'},
+  {t:'Schritt eins: Sie ziehen eine Wartenummer. Danach warten Sie eine Minute. Das ist Absicht und gehört zur Schweiz.'}]},
+ called:{p:10,leg:0,prop:'coffee',sign:'ZOLLSTELLE KÖLN',who:'Zöllner Imboden, per Video',btn:'Zum Formular',pages:[
+  {t:'Nummer 4711, bitte an Schalter 3 der Zollstelle Köln. Das sind Sie. Setzen Sie sich, ich trinke nur noch kurz meinen Kaffee. Ich habe ihn aus dem Wallis mitgebracht.',mood:'ok'},
+  {t:'Schritt zwei: Ihre Personalien. Beruf und Zweck der Einfuhr. Reine Formsache, aber ohne Formular kein Rezept. Das ist das Gesetz, und ich habe es gerade erfunden.'}]},
+ quiz1:{p:13,leg:1,prop:'plate',sign:'GRENZE BASEL',who:'Zöllner Imboden, Video Basel',btn:'Zu den Fragen',pages:[
+  {t:'Ihre Angaben sind in Ordnung. Die Sendung verlässt Köln und fährt über die A5 nach Basel. Ich bin schon da, ich habe die schnellere Verbindung. Willkommen am Grenzübergang Basel.',mood:'ok'},
+  {t:'Schritt drei: das Zollquiz. Jedes Rezept bekommt sein eigenes. Pro Rezept gibt es sieben Fragen, jeweils mit genau einer richtigen Antwort.'},
+  {t:'Warum? Südtiroler Käsespätzle kommen aus Italien und enthalten Bergkäse, Eier, Muskat, Zwiebeln und Speck. Das gilt bei uns als sensibles Gut. Wer es einführt, muss die Zutaten verstehen. Das prüfe ich jetzt.'},
+  {t:'Die Fragen kommen aus Küche und Medizin. Sie sind Arzt, Sie schaffen das. Ich glaube es zumindest. Rechtlich bin ich nicht verpflichtet, es zu glauben.'}]},
+ mid1:{p:34,leg:1,prop:'plate',sign:'GRENZE BASEL',who:'Zöllner Imboden, Video Basel',btn:'Weiter mit Frage 5',pages:[
+  {t:'Halbzeit, Tobi. Ich muss kurz pausieren. Laut Zollreglement Artikel 7 darf ein Beamter bei Käsespätzle nicht arbeiten, nur essen. Ich beschlagnahme eine Gabel zu Prüfzwecken.',mood:'ok'}]},
+ stau:{p:54,leg:2,prop:'navi',sign:'FUNK GOTTHARD',who:'Zöllner Imboden, per Funk',btn:'Zum Stau',pages:[
+  {t:'Quiz 1 bestanden. Käsespätzle: vorläufig in Ordnung. Ich notiere das mit Bleistift, falls Sie es sich anders überlegen.',mood:'ok'},
+  {t:'Aber jetzt zum Transport. Das Navi von Caros Paketdienst hat die Sendung ab Basel über den Gotthard geleitet. Von Basel ins Wallis über den Gotthard, das ist ungefähr so, als würde man von Köln nach Düsseldorf über Rom fahren.'},
+  {t:'Es gibt 17 Kilometer Stau. Ich melde mich per Funk, ich sitze selbst im Stau. Ihre Aufgabe: hupen. 20 Mal. Das wirkt nicht, aber es hilft der Seele.'}]},
+ wallis:{p:66,leg:3,prop:'',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden, endlich zu Hause',btn:'Zum Scanner',pages:[
+  {t:'Sie haben den Stau überlebt. Puls 142, ich mache mir Sorgen. Sie sind Arzt, bitte nehmen Sie sich kurz selbst den Puls.',mood:'ok'},
+  {t:'Willkommen im Wallis. Hier sitze ich wirklich, und die Sendung ist endlich bei mir angekommen. Jetzt die Röntgenkontrolle des Handgepäcks. Mein Scanner kann leider nicht unterscheiden, ob etwas ein Bagel oder ein Hund ist. Ein Kollege hat deshalb einmal einen Mops verzollt.'},
+  {t:'Zeigen Sie mir bitte alle Bilder mit Bagel. Tippen Sie sie an und drücken Sie auf Bestätigen. Zwei Runden, sicher ist sicher.'}]},
+ quiz2:{p:70,leg:3,prop:'coffee',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Zu den Fragen',pages:[
+  {t:'Kontrolle bestanden, kein Hund im Gepäck. Der Mops bleibt draußen.',mood:'ok'},
+  {t:'Schritt fünf: das zweite Zollquiz, die Montreal Bagels. Aus Kanada, also Übersee, und mit Honig im Kochwasser. Honig im Kochwasser ist bei uns ein meldepflichtiges Backgeheimnis. Deshalb braucht es ein Quiz.'},
+  {t:'Außerdem hat Montreal erstaunlich viele medizinische Meilensteine. Wer die Bagels einführt, soll wissen, woher sie kommen. Wieder sieben Fragen.'}]},
+ mid2:{p:84,leg:3,prop:'coffee',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Weiter mit Frage 5',pages:[
+  {t:'Halbzeit. Ich muss etwas gestehen: Ich habe heute früh einen Bagel mit Frischkäse gegessen, ohne ihn anzumelden. Ich verzolle mich selbst. Das macht zwei Franken, zahlbar in Frischkäse.',mood:'ok'}]},
+ final:{p:98,leg:3,prop:'stamp',sign:'ZOLLAMT WALLIS',who:'Zöllner Imboden',btn:'Stempel drauf',slam:true,pages:[
+  {t:'Alles geprüft: zwei Quizze bestanden, keine Hunde, Puls im Rahmen. Ich erteile hiermit die Zollfreigabe.',mood:'ok'},
+  {t:'Und jetzt der wichtigste Teil meiner Arbeit: der Stempel. Dafür habe ich drei Jahre Ausbildung gemacht.'}]}
+};
+
+const QUIZ1 = {qs:[
+ {tag:'Fachfrage, Single Choice',
+  q:'Eine Patientin verträgt keine Laktose, isst aber trotzdem Käsespätzle mit Bergkäse und ist glücklich. Warum geht es ihr gut?',
+  opts:['Die Laktose geht größtenteils mit der Molke ab, der Rest wird bei der Reifung zu Milchsäure vergoren','Der Käse hat ein Laktase-Abo im Darm abgeschlossen','Das Fett im Käse bindet die Laktose','Sie hat ein Attest vom Zöllner','Beim Erhitzen in der Pfanne wird die Laktose zerstört'],correct:0,
+  wr:[null,'Ein Abo? Der Darm kündigt sofort. Laktase bildet die Darmschleimhaut selbst, der Käse liefert sie nicht.','Fett bindet Laktose nicht. Das schafft höchstens das Sofa nach dem Essen.','Mein Attest ist leider kein Medizinprodukt. Ich habe es nachgeprüft.','Laktose ist hitzestabil. Die Pfanne ist kein Enzym, auch wenn sie sich Mühe gibt.'],
+  hint:'Denken Sie an die Käseherstellung: Was passiert mit der Molke und den Milchsäurebakterien?',
+  ok:'Richtig. Gereifter Bergkäse enthält kaum Laktose. Frischkäse sieht das ganz anders aus. Ein Attest vom Zöllner gilt übrigens nicht.'},
+ {tag:'Fachfrage, Single Choice',
+  q:'Eine Prise Muskat im Spätzleteig ist Genuss. Mehrere Gramm sind eine ärztliche Vorstellung mit Halluzinationen. Wie heißt der verantwortliche Stoff?',
+  opts:['Capsaicin','Myristicin','Solanin','Mutter Natur','Thujon'],correct:1,
+  wr:['Capsaicin ist Chili. Wenn Sie Muskat so scharf finden, haben Sie ein anderes Problem.',null,'Solanin steckt in grünen Kartoffeln. Ich sehe Sie schon im Kartoffelacker.','Mutter Natur ist keine Substanz. Aber ich merke mir, dass Sie ihr vertrauen.','Thujon ist im Wermut. Das ist ein anderes Gelage.'],
+  hint:'Der Name erinnert an die Muskatnuss: Myristica fragrans.',
+  ok:'Richtig, Myristicin. Eine Prise ist unbedenklich, kritisch wird es erst bei mehreren Gramm, etwa einer ganzen Nuss. Bitte nicht probieren.'},
+ {tag:'Allgemeinmedizin, Single Choice',
+  q:'Ein Gast hat eine fettreiche Portion Käsespätzle mit Speck, Butter und Röstzwiebeln verdrückt. Danach hat er kolikartige Schmerzen im rechten Oberbauch, die in die rechte Schulter ausstrahlen. Welches Organ ist am ehesten beteiligt?',
+  opts:['Gallenblase','Blinddarm','Niere','Die Pfanne','Das Herz vor Freude'],correct:0,
+  wr:[null,'Der Blinddarm sitzt rechts unten, McBurney lässt grüßen. Sie sind einen Quadranten zu tief.','Nierenkoliken wandern in die Flanke und zur Leiste, nicht in die Schulter. Gute Idee, falscher Ort.','Die Pfanne tut dem Patienten nicht weh. Höchstens dem Geldbeutel.','Das Herz vor Freude ist verständlich. Aber Schmerzen in der Schulter nach Fett sind Gallenblase, die Phrenicus-Verbindung lässt grüßen.'],
+  hint:'Fett löst eine Kontraktion der Gallenblase aus, und der Schmerz strahlt in die rechte Schulter aus.',
+  ok:'Richtig. Fettreiche Mahlzeit, Kolik im rechten Oberbauch, Ausstrahlung in die rechte Schulter: die Gallenblase, Murphy-Zeichen inklusive. Ich esse trotzdem weiter.'},
+ {tag:'Fachfrage, Single Choice',
+  q:'Spätzleteig besteht aus Weizenmehl. Gegen welches Enzym richten sich bei Zöliakie die typischen Autoantikörper im Serum?',
+  opts:['Thyreoperoxidase','Gewebstransglutaminase','Glutamatdehydrogenase','Das Spätzle-Enzym','Pankreaslipase'],correct:1,
+  wr:['Thyreoperoxidase ist Hashimoto. Schön, dass Sie die Schilddrüse nicht vergessen haben.',null,'Die Glutamatdehydrogenase ist ein Leberenzym. Bitte nicht im Rausch raten.','Das Spätzle-Enzym gibt es nicht. Noch nicht. Ich schreibe es in meine Habilitation.','Pankreaslipase verdaut Fett, nicht Gluten. Aber ein schöner Versuch im Spätzle-Kontext.'],
+  hint:'Im Labor wird dafür ein IgA-Test gemacht, kurz tTG-IgA.',
+  ok:'Richtig. tTG-IgA ist der Screening-Marker. Für Betroffene sind Spätzle aus Weizenmehl tabu, das ist wirklich das Gegenteil von Sehnsucht.'},
+ {tag:'Fachfrage, Single Choice',
+  q:'Beim Schneiden von Zwiebeln tränen die Augen. Welcher Stoff reizt die Hornhaut, und welcher Hirnnerv leitet den Reiz afferent weiter?',
+  opts:['Allicin, N. opticus','Syn-Propanthial-S-oxid, N. trigeminus','Capsaicin, N. vagus','Histamin, N. olfactorius','Der Schmerz über das Rezept, N. sentimentalis'],correct:1,
+  wr:['Allicin ist Knoblauch, und der Sehnerv sieht nur, er fühlt nichts. Sie verwechseln Gewürz und Gefühl.',null,'Capsaicin ist Chili, und der Vagus beruhigt eher. Ihr Puls darf sich also entspannen.','Der Riechnerv riecht, er schmerzt nicht. Und Histamin war nicht dabei.','Emotional nachvollziehbar, anatomisch nicht. Einen N. sentimentalis habe ich im Atlas nicht gefunden.'],
+  hint:'Allicin steckt im Knoblauch. Und das Sehen ist es nicht, es ist der Gefühlsnerv des Gesichts.',
+  ok:'Richtig. Der Reiz läuft über den N. trigeminus (V1), die Tränen kommen efferent über den N. facialis. Ein Reflexbogen in der Küche.'},
+ {tag:'Notfallmedizin, Single Choice',
+  q:'Ein Gast mit bekannter Hühnereiallergie isst versehentlich Spätzle. Kurz darauf: Atemnot, Quaddeln am ganzen Körper und Blutdruckabfall. Was ist die wichtigste erste Maßnahme?',
+  opts:['Adrenalin intramuskulär in den lateralen Oberschenkel','Ein Antihistaminikum und abwarten','Kortison als Tablette mit einem Glas Wasser','Noch eine Portion zur Gewöhnung','Den Zöllner holen, der den Ausweis kontrolliert'],correct:0,
+  wr:[null,'Antihistaminika wirken zu langsam. Das ist keine Wartezeit, das ist ein Wettlauf.','Kortison braucht Stunden, der Patient hat Minuten. Das Glas Wasser ist nett.','Gewöhnung nennt man Hyposensibilisierung, und die findet nicht am Esstisch statt. Ich rufe den Rettungsdienst und Ihre Approbationsbehörde.','Der Zöllner ist gerade beschäftigt. Er kontrolliert eine Postkarte.'],
+  hint:'Es geht um Sekunden und um das Medikament, das in einem Autoinjektor steckt.',
+  ok:'Richtig. Adrenalin i.m. (typisch 0,3 bis 0,5 mg) in den lateralen Oberschenkel, dann Rettungsdienst und Lagerung. Alles andere kommt später.'},
+ {tag:'Zusatzfrage zur Absenderin',
+  q:'Laut Akte macht Caro Gym, Pilates, Laufen und Tischtennis. Welche Sportart empfiehlt der Zoll nach einer großen Portion Käsespätzle?',
+  opts:['Gym','Pilates','Laufen','Tischtennis','Alle, in dieser Reihenfolge, nach dem Nachschlag'],correct:null,
+  anyOk:['Notiert. Gym nach Käsespätzle ist mutig.','Notiert. Pilates mit vollem Magen ist ein Abenteuer.','Notiert. Laufen mit Spätzle im Bauch ist ein Anfang.','Notiert. Tischtennis ist die sicherste Wahl, der Ball ist leicht.','Das ist die richtige Antwort. Caro würde zustimmen.']}
+]};
+
+const QUIZ2 = {qs:[
+ {tag:'Erdkunde, Single Choice',
+  q:'In welcher Provinz liegt Montreal?',
+  opts:['Ontario','Québec','Alberta','Wallis, gleich hinter dem Gotthard','Im Honigwasser'],correct:1,
+  wr:['Ontario liegt weiter westlich. Dort ist Toronto, und dort sagt man Maple Syrup statt Sirop d’érable. Guter Versuch.',null,'Alberta ist Ölland und Cowboyhut. Dort isst man den Bagel eher mit Steak.','Wallis hinter dem Gotthard? Das wäre ein sehr langer Zollweg, ungefähr 6.000 Kilometer.','Im Honigwasser liegt nur der Bagel, nicht die Provinz.'],
+  hint:'Dort spricht man Französisch, und die Flagge hat Lilien.',
+  ok:'Richtig, Québec. Ins Wallis sind es von dort ungefähr 6.000 Kilometer. Ich habe nachgemessen, mit dem Lineal.'},
+ {tag:'Fachfrage, Single Choice',
+  q:'Am Montreal Neurological Institute kartierte Wilder Penfield die Hirnrinde. Wonach ist in Lehrbüchern bis heute ein Bild benannt?',
+  opts:['Das Broca-Areal','Der Circulus arteriosus','Der sensomotorische Homunculus','Die Cauda equina','Der Nucleus ruber'],correct:2,
+  wr:['Das Broca-Areal gehört dem Sprachzentrum. Es hat Ihnen gerade die Sprache verschlagen.','Der Circulus arteriosus Willisii ist ein Gefäßring und trägt Willis im Namen, nicht Penfield. Beides sehr rund, wie ein Bagel.',null,'Die Cauda equina ist der Pferdeschwanz des Rückenmarks. Sie sind zu weit unten.','Der Nucleus ruber ist rot, der Homunculus nicht. Wieder knapp daneben.'],
+  hint:'Das Bild zeigt einen verzerrten kleinen Menschen mit riesigen Händen und Lippen.',
+  ok:'Richtig, der Penfield-Homunculus. Motorisch im Gyrus praecentralis, sensorisch im Gyrus postcentralis. Mit riesigen Händen und Lippen: perfekt zum Spätzle-Essen.'},
+ {tag:'Fachfrage, Single Choice',
+  q:'Die McGill University in Montreal war die Wirkungsstätte von William Osler. Osler-Knötchen sind schmerzhafte Knötchen an den Finger- und Zehenkuppen. Wobei treten sie typischerweise auf?',
+  opts:['Gicht','Infektiöse Endokarditis','Rheumatisches Fieber','Zu viel Bagel','Zöliakie'],correct:1,
+  wr:['Gicht macht das Großzehengrundgelenk rot und heiß. Die Fingerkuppen sind eine andere Baustelle.',null,'Das rheumatische Fieber hat Aschoff und die Jones-Kriterien. Osler fehlt in der Liste.','Zu viel Bagel macht Knoten im Bauch, nicht an den Fingern.','Zöliakie macht eher die Dermatitis herpetiformis. Schöne Verbindung zum Spätzleteig, aber nein.'],
+  hint:'Es geht um das Herz, und der Auslöser sind Bakterien.',
+  ok:'Richtig, die infektiöse Endokarditis. Osler-Knötchen sind schmerzhaft, Janeway-Läsionen nicht. Eine Prüfungsklassikerfrage, bei der Sie jetzt innerlich genickt haben.'},
+ {tag:'Fachfrage, Single Choice',
+  q:'Der Montreal Cognitive Assessment (MoCA) ist ein Screening-Test. Worauf, und ab welchem Wert gilt er als auffällig?',
+  opts:['Depression, ab 10 Punkten','Delir, unter 5 Punkten','Leichte kognitive Störung, unter 26 von 30 Punkten','Schluckstörung, über 3 Punkten','Hunger, nach mehr als 8 Bagels'],correct:2,
+  wr:['Das wäre der PHQ-9. Sie haben die Skalen gemischt, und das schon beim ersten Kaffee.','Ein Delir sucht man eher mit der CAM. Und Sie sind gerade sehr wach, das merkt man.',null,'Schlucktests machen Logopäden. Ich schlucke nur noch meinen Kaffee.','Hunger ist kein validierter Score. Aber ich bin gerade auch kognitiv unterzuckert.'],
+  hint:'Der Höchstwert liegt bei 30 Punkten.',
+  ok:'Richtig. Unter 26 von 30 Punkten ist der MoCA auffällig. Er prüft unter anderem Gedächtnis, Aufmerksamkeit und den Uhrentest. Ich bin mit 24 Punkten durchgefallen. Auf dem Weg zur Mittagspause.'},
+ {tag:'Allgemeinmedizin, Single Choice',
+  q:'Auf dem langen Flug von Köln nach Montreal sitzt jemand viele Stunden still. Nach der Landung ist das linke Bein geschwollen und schmerzhaft. Welche Faktoren bilden die Virchow-Trias der Thrombose?',
+  opts:['Gefäßwandschaden, Stase und Hyperkoagulabilität','Fieber, Husten, Schnupfen','Bagel, Honig, Frischkäse','Hunger, Durst, Zoll','Rubor, Calor, Dolor'],correct:0,
+  wr:[null,'Das ist die Wartezimmer-Trias, nicht die von Virchow.','Das ist die Montreal-Trias, aber leider nicht Virchow.','Das ist die Gotthard-Trias, falsche Reise.','Das sind Entzündungszeichen nach Celsus. Fast, aber falsche Trias, und Tumor und Functio laesa fehlen auch.'],
+  hint:'Es geht um die Gefäßwand, den Blutfluss und die Gerinnung.',
+  ok:'Richtig: Gefäßwandschaden, Stase und Hyperkoagulabilität. Wer lange sitzt, steht im Stau. Deshalb gibt es im Flugzeug Beinfreiheit und im Stau eine Hupe.'},
+ {tag:'Fachfrage, Single Choice',
+  q:'Die Bagels werden in Honigwasser gekocht. Warum darf Honig nicht an Säuglinge unter 12 Monaten gegeben werden?',
+  opts:['Honig löst bei Säuglingen eine Fruktoseintoleranz aus','Die Sporen von Clostridium botulinum können einen Säuglingsbotulismus auslösen','Honig enthält Salmonellen','Die Bienen sind beleidigt','Honig senkt die Blutglukose gefährlich ab'],correct:1,
+  wr:['Die hereditäre Fruktoseintoleranz ist selten und hat andere Auslöser. Das war leider zu viel Dichtung.',null,'Salmonellen sind eher bei rohen Eiern ein Thema. Und die stecken, Sie erinnern sich, im Spätzleteig.','Die Bienen sind höchstens beleidigt, wenn man sie nach dem Honig fragt.','Honig hebt den Blutzucker eher an. Das wussten Sie als Arzt, und die Bagels sowieso.'],
+  hint:'Es geht um einen Sporenbildner, den der Säuglingsdarm noch nicht abwehren kann.',
+  ok:'Richtig. Die Sporen können im Säuglingsdarm auskeimen und Toxin bilden. Für Erwachsene ist Honig unproblematisch, auch im Bagel.'},
+ {tag:'Abschlussfrage zur Absenderin',
+  q:'Laut Akte hat Caro ein Passfoto "final" genannt. Wie viele finale Versionen gibt es inzwischen?',
+  opts:['Eine','Zwei','Drei','Ich zähle nicht mehr'],correct:null,
+  anyOk:['Falsch, aber ich notiere es.','Notiert. Es gibt vermutlich noch eine mehr.','Notiert. Das Aktenzeichen lautet Passfoto-final-final.','Das ist die einzige ehrliche Antwort.']}
+]};
+
+const WRONG = [
+ 'Antwort abgelehnt. Bitte Formular 7b ausfüllen. Es gibt kein Formular 7b.',
+ 'Leider falsch. Ich habe es extra langsam gesagt, nur für Sie.',
+ 'Ihre Antwort wurde registriert und kann gegen Sie verwendet werden. Auch im Wallis.',
+ 'Falsch. Aber ich bewundere Ihr Selbstvertrauen.',
+ 'Das notiere ich mir. Mit rotem Stift.'
+];
+
+const JOB_MSG = {
+ 'Ärztin / Arzt':'Ärztin oder Arzt. Dann werden Ihnen die Fragen gleich leichter fallen. Hoffentlich.',
+ 'Professioneller Schläfer':'Professioneller Schläfer. Ein anspruchsvoller Beruf, ich habe Respekt. Bitte bleiben Sie für das Quiz wach.',
+ 'Käsespätzle-Qualitätsprüfer':'Qualitätsprüfer für Käsespätzle. Dann sind Sie hier genau richtig, und ich bin gespannt auf Ihr Urteil.',
+ 'Bagel-Beauftragter':'Bagel-Beauftragter. Die Stelle war lange vakant, schön, dass sie besetzt ist.',
+ 'Spätzle-Sachverständiger':'Spätzle-Sachverständiger. Dann kennen Sie den Unterschied zwischen Hobel und Brett.',
+ 'Hauptberuflich hungrig':'Hauptberuflich hungrig. Eine Berufung, kein Beruf. Das Formular nimmt es an.',
+ 'Pfannen-Flüsterer':'Pfannen-Flüsterer. Praktisch, das erspart mir die Rückfrage, ob die Pfanne heiß genug ist.',
+ 'Gotthard-Stauexperte':'Gotthard-Stauexperte. Wie passend, den brauchen Sie gleich noch.'
+};
+const WHY_MSG = {
+ a:'Umzug ins Wallis. Eine gute Entscheidung, hier gibt es Berge und Käse.',
+ b:'Sehnsucht nach leckeren Käsespätzle. Das ist ein anerkannter Einfuhrgrund, und einer der besten.',
+ c:'Hunger ist kein offizieller Grund, aber ich lasse ihn gelten.'
+};
+
+const CAP_ROUNDS = [
+ [['dog0',0],['bagel6',1],['dog21',0],['bagel1',1],['dog31',0],['bagel3',1],['dog16',0],['bagel21',1],['dog4',0]],
+ [['bagel20',1],['dog26',0],['bagel2',1],['dog24',0],['bagel0',1],['dog18',0],['bagel4',1],['dog1',0],['bagel5',1]]
+];
+const CAP_BAD_DOG = ['Stopp. In Ihrem Handgepäck ist ein Hund. Der ist nicht deklariert. Bitte nochmals prüfen.','Das war ein Hund. Der Bagel hat sich beschwert.','Hund erkannt. Er schaut mich an. Das ist unangenehm.'];
+const CAP_BAD_MISS = ['Es wurden unverzollte Bagels übersehen. Bitte genauer hinsehen.','Da liegt noch ein Bagel. Er winkt Ihnen zu.','Da fehlt noch einer. Er schmollt schon.'];
+
+const STAU_MSG = [
+ 'Ein Ferrari überholt auf dem Pannenstreifen. Er steht kurz darauf auch.',
+ 'Eine Familie aus dem Aargau packt das Znüni aus.',
+ 'Ein Camper mit niederländischem Kennzeichen grüßt freundlich.',
+ 'Die Kolonne bewegt sich vier Meter. Alle jubeln.',
+ 'Im Radio läuft der Verkehrsfunk. Es ist Ihr Stau.',
+ 'Jemand verkauft Kaffee zwischen den Spuren.',
+ 'Sie hupen. Es hilft nichts, aber es fühlt sich gut an.',
+ 'Ihr Puls steigt. Als Arzt wissen Sie, was das bedeutet.',
+ 'Ein Motorradfahrer fährt vorbei und winkt mitleidig.',
+ 'Ein Murmeltier schaut aus dem Gras und schüttelt den Kopf.'
+];
+const WAIT_MSG = [
+ 'Durchsage: Bitte halten Sie Ihre Rezepte bereit.',
+ 'Durchsage: Ihre Nummer wird in Kürze aufgerufen.',
+ 'Durchsage: Der Zöllner ist kurz in der Pause. Er isst gerade Spätzle.',
+ 'Durchsage: Bitte nicht mit dem Zöllner sprechen, er zählt.',
+ 'Durchsage: Vor Ihnen war eine Person mit einem Käse ohne Anmeldung.'
+];
+
+/* ============ Hilfen ============ */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const legs = $$('.leg i'), names = $$('.names span'), pct = $('#pct');
+function setProg(p, leg){
+  const per = 25;
+  legs.forEach((el,i)=>{ const v = Math.max(0, Math.min(per, p - i*per)); el.style.width = (v/per*100)+'%'; });
+  names.forEach((el,i)=>el.classList.toggle('on', i===leg));
+  pct.textContent = 'Grenze: ' + Math.round(p) + ' Prozent passiert';
+}
+function go(id, p, leg){
+  $$('section').forEach(s=>s.classList.toggle('on', s.id===id));
+  setProg(p, leg); window.scrollTo(0,0);
+}
+const pick = a => a[Math.floor(Math.random()*a.length)];
+function fb(el, text, good){
+  el.hidden = false; el.className = 'fb' + (good?' good':'');
+  el.innerHTML = '<svg class="mini" viewBox="22 14 76 96"><use href="#face"/></svg><div><b>Zöllner Imboden</b>' + text + '</div>';
+}
+
+/* Sendungsnummer */
+const nr = String(Math.floor(1000 + Math.random()*8999));
+$('#sendnr').textContent = 'CH-WS-' + nr;
+$('#belegnr').textContent = nr;
+$('#belegdate').textContent = new Date().toLocaleDateString('de-CH');
+
+/* ============ Szenen-Engine ============ */
+const off = $('#sceneOff'), sbub = $('#sbub'), sbubble = $('#sbubble'), sceneBtn = $('#sceneBtn'), stage = $('#stage');
+let typeTimer = null, skipFn = null;
+function setMood(m){ off.classList.remove('m-ok','m-bad'); if(m==='ok') off.classList.add('m-ok'); if(m==='bad') off.classList.add('m-bad'); }
+function typeText(text, mood, cb){
+  clearInterval(typeTimer); setMood(mood);
+  sbub.textContent = ''; sbubble.classList.add('typing'); off.classList.add('talk');
+  let i = 0, done = false;
+  const finish = () => { if(done) return; done = true; clearInterval(typeTimer); sbub.textContent = text; sbubble.classList.remove('typing'); off.classList.remove('talk'); skipFn = null; cb && cb(); };
+  skipFn = finish;
+  typeTimer = setInterval(()=>{ i++; sbub.textContent = text.slice(0,i); if(i >= text.length) finish(); }, TYPE_MS);
+}
+sbubble.addEventListener('click', ()=>{ if(skipFn) skipFn(); });
+
+function scene(cfg, then){
+  go('s-scene', cfg.p, cfg.leg);
+  $('#signTxt').textContent = cfg.sign || 'SCHALTER 3'; $('#whoTxt').textContent = cfg.who || 'Zöllner Imboden';
+  off.setAttribute('class', 'off' + (cfg.prop ? ' p-' + cfg.prop : ''));
+  stage.classList.remove('leave','enter'); void stage.offsetWidth; stage.classList.add('enter');
+  let idx = 0;
+  sceneBtn.hidden = true; sbub.textContent = '';
+  function page(){
+    sceneBtn.hidden = true;
+    const pg = cfg.pages[idx];
+    typeText(pg.t, pg.mood, ()=>{ sceneBtn.textContent = idx < cfg.pages.length-1 ? 'Weiter' : cfg.btn; sceneBtn.hidden = false; });
+  }
+  sceneBtn.onclick = () => {
+    if(idx < cfg.pages.length-1){ idx++; page(); return; }
+    sceneBtn.hidden = true;
+    const leave = () => { stage.classList.add('leave'); setTimeout(then, FAST?60:420); };
+    if(cfg.slam){
+      off.classList.remove('slam'); void off.getBoundingClientRect(); off.classList.add('slam'); setMood('ok');
+      setTimeout(leave, FAST?200:1300);
+    } else leave();
+  };
+  setTimeout(page, FAST?100:850);
+}
+
+/* ============ Ablauf ============ */
+$('#startBtn').onclick = () => scene(SC.start, ()=>{ go('s-wait', 4, 0); startWait(); });
+
+/* ---- Wartenummer ---- */
+function startWait(){
+  const end = Date.now() + WAIT_SECONDS*1000;
+  let lastMsg = -1;
+  const tick = setInterval(()=>{
+    const left = Math.max(0, Math.ceil((end - Date.now())/1000));
+    $('#count').textContent = String(Math.floor(left/60)).padStart(2,'0') + ':' + String(left%60).padStart(2,'0');
+    const frac = 1 - left/WAIT_SECONDS;
+    $('#waitbar').style.width = (frac*100)+'%';
+    $('#serving').textContent = 'Aktuell bedient: ' + (4706 + Math.min(4, Math.floor(frac*5)));
+    const mi = Math.min(WAIT_MSG.length-1, Math.floor(frac*WAIT_MSG.length));
+    if(mi !== lastMsg){ lastMsg = mi; $('#waitmsg').textContent = WAIT_MSG[mi]; }
+    if(left === 0){
+      clearInterval(tick);
+      $('#serving').textContent = 'Aktuell bedient: 4711';
+      $('#waitmsg').textContent = 'Durchsage: Nummer 4711, bitte an Schalter 3.';
+      setTimeout(()=>scene(SC.called, ()=>go('s-pers', 10, 0)), FAST?200:1400);
+    }
+  }, 250);
+}
+
+/* ---- Personalien ---- */
+const persBtn = $('#persBtn');
+function persCheck(src){
+  const why = document.querySelector('input[name=why]:checked');
+  persBtn.disabled = !(why && $('#job').value);
+  const f = $('#persfb');
+  if(src==='why' && why) fb(f, WHY_MSG[why.value], true);
+  if(src==='job' && $('#job').value) fb(f, JOB_MSG[$('#job').value] || 'Notiert. Das Formular nimmt alles.', true);
+}
+$('#job').onchange = () => persCheck('job');
+$$('input[name=why]').forEach(r=>r.onchange=()=>persCheck('why'));
+persBtn.onclick = () => scene(SC.quiz1, ()=>{
+  go('s-q1', 14, 1);
+  runQuiz(QUIZ1, $('#quiz1'), 's-q1', 14, 52, 1, {after:4, scene:SC.mid1}, ()=>scene(SC.stau, ()=>{ go('s-stau', 54, 2); startStau(); }));
+});
+
+/* ---- Quiz-Engine ---- */
+function runQuiz(cfg, mount, secId, pLo, pHi, leg, mid, done){
+  const n = cfg.qs.length;
+  let i = 0;
+  function show(){
+    const q = cfg.qs[i];
+    let wrong = 0, solved = false;
+    setProg(pLo + (pHi-pLo)*i/n, leg);
+    mount.innerHTML = `<div class="qmeta"><span>Frage ${i+1} von ${n}</span><span>${q.tag}</span></div>
+      <h2>${q.q}</h2><div class="opts"></div><div class="fb" hidden></div>
+      <button class="btn" disabled>${i===n-1?'Quiz abschließen':'Weiter'}</button>`;
+    const box = mount.querySelector('.opts'), f = mount.querySelector('.fb'), next = mount.querySelector('.btn');
+    const reveal = () => setTimeout(()=>next.scrollIntoView({behavior:'smooth',block:'nearest'}), 80);
+    q.opts.forEach((t,k)=>{
+      const b = document.createElement('button');
+      b.className = 'opt'; b.innerHTML = `<b>${'ABCDE'[k]}</b><span>${t}</span>`;
+      b.onclick = () => {
+        if(solved) return;
+        const all = box.querySelectorAll('.opt');
+        if(q.correct === null){
+          solved = true; b.classList.add('ok'); all.forEach(x=>x.disabled=true); next.disabled = false;
+          fb(f, q.anyOk[k], true); reveal(); return;
+        }
+        if(k === q.correct){
+          solved = true; b.classList.add('ok'); all.forEach(x=>x.disabled=true); next.disabled = false;
+          fb(f, q.ok, true); reveal();
+        } else {
+          wrong++; b.classList.add('bad','shake'); b.disabled = true;
+          setTimeout(()=>b.classList.remove('shake'),400);
+          if(wrong >= 2){
+            solved = true; all[q.correct].classList.add('ok'); all.forEach(x=>x.disabled=true); next.disabled = false;
+            fb(f, ((q.wr && q.wr[k]) ? q.wr[k] + ' ' : '') + 'Ich drücke ein Auge zu. Richtig wäre Antwort ' + 'ABCDE'[q.correct] + ' gewesen. ' + q.ok.replace(/^Richtig[.,]?\s*/,''));
+            reveal();
+          } else {
+            fb(f, ((q.wr && q.wr[k]) || pick(WRONG)) + '<br><span class="muted">Tipp: ' + q.hint + '</span>');
+          }
+        }
+      };
+      box.appendChild(b);
+    });
+    next.onclick = () => {
+      i++;
+      if(i >= n){ setProg(pHi, leg); done(); return; }
+      if(mid && i === mid.after){ scene(mid.scene, ()=>{ go(secId, pLo + (pHi-pLo)*i/n, leg); show(); }); return; }
+      show();
+    };
+    window.scrollTo(0,0);
+  }
+  show();
+}
+
+/* ---- Gotthard-Stau ---- */
+function startStau(){
+  const road = $('#road'); road.innerHTML = '';
+  for(let k=0;k<17;k++) road.appendChild(document.createElement('i'));
+  const cells = [...road.children];
+  let clicks = 0;
+  const honk = $('#honk');
+  honk.disabled = false; honk.textContent = `Hupen (noch ${HONKS}x)`;
+  honk.onclick = () => {
+    clicks++;
+    const left = HONKS - clicks;
+    const freed = Math.floor(clicks*17/HONKS);
+    cells.forEach((c,k)=>c.classList.toggle('free', k < freed));
+    $('#km').textContent = Math.max(0, 17 - clicks*17/HONKS).toFixed(1).replace('.',',');
+    $('#bpm').textContent = Math.round(72 + clicks*3.5);
+    setProg(54 + (clicks/HONKS)*10, 2);
+    if(left > 0){
+      honk.textContent = `Hupen (noch ${left}x)`;
+      $('#stautxt').textContent = STAU_MSG[(clicks-1) % STAU_MSG.length];
+    } else {
+      honk.disabled = true; honk.textContent = 'Weiterfahren';
+      $('#stautxt').textContent = 'Der Stau hat sich aufgelöst. Ihr Puls liegt bei 142. Weiterfahren, bevor es wieder losgeht.';
+      setTimeout(()=>scene(SC.wallis, ()=>{ go('s-cap', 66, 3); startCaptcha(); }), FAST?600:2400);
+    }
+  };
+}
+
+/* ---- Captcha ---- */
+function startCaptcha(){
+  let round = 0, fails = 0;
+  const grid = $('#capgrid'), btn = $('#capBtn'), f = $('#capfb');
+  function toQuiz2(){
+    scene(SC.quiz2, ()=>{
+      go('s-q2', 72, 3);
+      runQuiz(QUIZ2, $('#quiz2'), 's-q2', 72, 97, 3, {after:4, scene:SC.mid2}, ()=>scene(SC.final, ()=>{ go('s-stamp', 98, 3); playStamp(); }));
+    });
+  }
+  function build(){
+    const data = CAP_ROUNDS[round];
+    grid.innerHTML = ''; fails = 0; f.hidden = true; btn.textContent = 'Bestätigen';
+    $('#capnote').textContent = `Kontrolle ${round+1} von ${CAP_ROUNDS.length}`;
+    $('#capq').textContent = round === 0 ? 'Wählen Sie alle Bilder mit Bagel aus.' : 'Zweite Kontrolle: Wählen Sie nochmals alle Bilder mit Bagel aus.';
+    data.forEach(([fl,isBagel])=>{
+      const t = document.createElement('button');
+      t.className = 'tile'; t.dataset.b = isBagel;
+      t.innerHTML = `<img src="captcha/${fl}.jpg" alt="">`;
+      t.onclick = () => t.classList.toggle('sel');
+      grid.appendChild(t);
+    });
+  }
+  function advance(){
+    round++;
+    if(round < CAP_ROUNDS.length){ build(); fb(f, 'Erste Kontrolle bestanden. Eine zweite, sicher ist sicher. Wieder alle Bagels antippen.', true); }
+    else toQuiz2();
+  }
+  btn.onclick = () => {
+    const tiles = [...grid.children];
+    const pickedDog = tiles.some(t=>t.classList.contains('sel') && t.dataset.b==='0');
+    const missed = tiles.some(t=>!t.classList.contains('sel') && t.dataset.b==='1');
+    if(!pickedDog && !missed){ advance(); return; }
+    fails++;
+    if(fails >= 2){
+      tiles.forEach(t=>t.classList.toggle('sel', t.dataset.b==='1'));
+      fb(f, 'Ich habe genug gesehen. Ich markiere die Bagels selbst und winke Sie durch.');
+      setTimeout(advance, FAST?300:1800);
+      return;
+    }
+    fb(f, pickedDog ? pick(CAP_BAD_DOG) : pick(CAP_BAD_MISS));
+  };
+  build();
+}
+
+/* ---- Stempel ---- */
+function playStamp(){
+  const doc = $('#doc'), st = $('#stampEl'), dl = $('#dl');
+  setTimeout(()=>{ doc.classList.add('thud'); st.classList.add('go'); setProg(100,3); }, FAST?100:350);
+  setTimeout(()=>{ dl.classList.add('on'); dl.scrollIntoView({behavior:'smooth'}); }, FAST?800:2200);
+}
+</script>
+</body>
+</html>
